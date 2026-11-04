@@ -348,7 +348,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
       </div>
 
       {/* Main Centered Box with fluid mobile support */}
-      <div className="wizard-card w-full max-w-lg rounded-xl border border-zinc-700/80 bg-[#121215] p-5 sm:p-7 shadow-[0_0_24px_rgba(255,255,255,0.03)] flex flex-col justify-between">
+      <div className="wizard-card w-full max-w-lg rounded-lg border border-zinc-700/80 bg-[#121215]/80 p-5 sm:p-7 shadow-[0_0_24px_rgba(255,255,255,0.03)] flex flex-col justify-between">
         {/* Sleek animated progress bar */}
         {currentStep <= 10 && (
           <div className="mb-5 space-y-1.5 shrink-0">
@@ -550,7 +550,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
 
                 <div className="relative">
                   <div
-                    className={`pointer-events-none absolute top-0 left-0 right-0 h-6 bg-gradient-to-b from-[#121215] via-[#121215]/80 to-transparent backdrop-blur-[2px] [mask-image:linear-gradient(to_bottom,black_35%,transparent_100%)] transition-opacity duration-200 z-10 ${
+                    className={`pointer-events-none absolute top-0 left-0 right-0 h-6 bg-gradient-to-b from-[#101013] via-[#101013]/80 to-transparent backdrop-blur-[2px] [mask-image:linear-gradient(to_bottom,black_35%,transparent_100%)] transition-opacity duration-200 z-10 ${
                       presetScroled ? "opacity-100" : "opacity-0"
                     }`}
                   />
@@ -590,7 +590,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
 
                   {/* Premium bottom blur & gradient transition */}
                   <div
-                    className={`pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#121215] via-[#121215]/85 to-transparent backdrop-blur-[2px] [mask-image:linear-gradient(to_top,black_35%,transparent_100%)] transition-opacity duration-200 z-10 ${
+                    className={`pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#101013] via-[#101013]/85 to-transparent backdrop-blur-[2px] [mask-image:linear-gradient(to_top,black_35%,transparent_100%)] transition-opacity duration-200 z-10 ${
                       presetAtEnd ? "opacity-0" : "opacity-100"
                     }`}
                   />

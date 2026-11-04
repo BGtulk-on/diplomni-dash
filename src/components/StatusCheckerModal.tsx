@@ -138,7 +138,7 @@ export function StatusCheckerModal({ isOpen, onClose, initialTicket = "" }: Stat
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 8 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] as const }}
-            className="relative w-full max-w-md rounded-xl border border-zinc-700/80 bg-[#121215] p-6 shadow-2xl z-10"
+            className="relative w-full max-w-md rounded-lg border border-zinc-700/80 bg-[#121215] p-6 shadow-2xl z-10"
           >
             <button
               onClick={() => {
