@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Ticket {
+  id              String   @id @default(cuid())
+  ticketNumber    String   @unique
+  fullName        String
+  email           String
+  phone           String?
+  courseNumber    String
+  commPlatform    String
+  commHandle      String
+  hasCustomIdea   Boolean  @default(true)
+  ideaTitle       String
+  presetTheme     String?
+  ideaDescription String?
+  supervisor      String
+  scope           String   @default("FULL_PACKAGE")
+  difficulty      String   @default("STANDARD")
+  includeCodeComments Boolean @default(false)
+  offeredBudget   Int
+  additionalNotes String?
+  status          String   @default("PENDING")
+  adminNotes      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
