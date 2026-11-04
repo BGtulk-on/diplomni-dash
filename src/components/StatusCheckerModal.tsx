@@ -163,12 +163,12 @@ export function StatusCheckerModal({ isOpen, onClose, initialTicket = "" }: Stat
                 value={ticketInput}
                 onChange={(e) => setTicketInput(e.target.value.toUpperCase())}
                 placeholder="UKTC-2026-..."
-                className="flex-1 rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2 text-sm font-mono text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none"
+                className="flex-1 rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2 text-sm font-mono text-white placeholder-zinc-500 focus:border-zinc-300 focus:shadow-[0_0_10px_rgba(255,255,255,0.05)] focus:outline-none transition-all"
               />
               <button
                 type="submit"
                 disabled={loading || !ticketInput.trim()}
-                className="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-4 py-2 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 disabled:opacity-50 transition-colors shadow-sm"   
+                className="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-4 py-2 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 disabled:opacity-50 transition-all shadow-[0_0_12px_rgba(255,255,255,0.12)]"   
               >
                 {loading ? "..." : "Провери"}
                 <ArrowRight className="h-4 w-4" />

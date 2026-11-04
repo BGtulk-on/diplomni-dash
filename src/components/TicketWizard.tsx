@@ -342,13 +342,13 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
 
       {/* Brand Header */}
       <div className="text-center mb-4 sm:mb-5 max-w-md">
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase drop-shadow-[0_0_14px_rgba(255,255,255,0.08)]">
           ЛЕСНА ДИПЛОМНА
         </h1>
       </div>
 
       {/* Main Centered Box with fluid mobile support */}
-      <div className="wizard-card w-full max-w-lg rounded-xl border border-zinc-700/80 bg-[#121215] p-5 sm:p-7 shadow-2xl flex flex-col justify-between">
+      <div className="wizard-card w-full max-w-lg rounded-xl border border-zinc-700/80 bg-[#121215] p-5 sm:p-7 shadow-[0_0_24px_rgba(255,255,255,0.03)] flex flex-col justify-between">
         {/* Sleek animated progress bar */}
         {currentStep <= 10 && (
           <div className="mb-5 space-y-1.5 shrink-0">
@@ -362,7 +362,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
             </div>
             <div className="h-1.5 w-full rounded-full bg-zinc-800 overflow-hidden border border-zinc-700/60">
               <motion.div
-                className="h-full rounded-full bg-white"
+                className="h-full rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.22)]"   
                 initial={false}
                 animate={{ width: `${(Math.min(currentStep, 10) / 10) * 100}%` }}
                 transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] as const }}
@@ -399,7 +399,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Мартин"
-                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none transition-colors"   
+                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:shadow-[0_0_10px_rgba(255,255,255,0.05)] focus:outline-none transition-all"   
                   />
                   {errors.fullName && (
                     <p className="mt-1.5 text-xs text-red-400 font-mono">{errors.fullName}</p>
@@ -469,7 +469,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                       onChange={(e) => setCommPlatform(e.target.value)}
                       placeholder="Платформа (Discord, Telegram...)"
                       autoFocus
-                      className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none transition-colors"
+                      className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:shadow-[0_0_10px_rgba(255,255,255,0.05)] focus:outline-none transition-all"
                     />
                     {errors.commPlatform && (
                       <p className="mt-1 text-xs text-red-400 font-mono">{errors.commPlatform}</p>
@@ -482,7 +482,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                       value={commHandle}
                       onChange={(e) => setCommHandle(e.target.value)}
                       placeholder="Потребителско име или тел."
-                      className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none transition-colors"
+                      className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:shadow-[0_0_10px_rgba(255,255,255,0.05)] focus:outline-none transition-all"
                     />
                     {errors.commHandle && (
                       <p className="mt-1 text-xs text-red-400 font-mono">{errors.commHandle}</p>
@@ -519,7 +519,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     onChange={(e) => setSupervisor(e.target.value)}
                     placeholder="пр: Гоцева"
                     autoFocus
-                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none transition-colors"
+                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:shadow-[0_0_10px_rgba(255,255,255,0.05)] focus:outline-none transition-all"
                   />
                   {errors.supervisor && (
                     <p className="mt-1 text-xs text-red-400 font-mono">{errors.supervisor}</p>
@@ -570,9 +570,9 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                           key={preset.id}
                           type="button"
                           onClick={() => handleSelectPreset(preset.id)}
-                          className={`rounded-md border p-2.5 text-left transition-colors ${
+                          className={`rounded-md border p-2.5 text-left transition-all ${
                             isSelected
-                              ? "border-zinc-200 bg-zinc-800 text-white shadow-sm"
+                              ? "border-zinc-200 bg-zinc-800 text-white shadow-[0_0_10px_rgba(255,255,255,0.06)]"
                               : "border-zinc-700/80 bg-[#18181c] text-zinc-300 hover:border-zinc-500 hover:text-white"
                           }`}
                         >
@@ -602,7 +602,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     value={ideaTitle}
                     onChange={(e) => setIdeaTitle(e.target.value)}
                     placeholder="Заглавие на темата"
-                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none"
+                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:shadow-[0_0_10px_rgba(255,255,255,0.05)] focus:outline-none transition-all"
                   />
                   {errors.ideaTitle && (
                     <p className="mt-1 text-xs text-red-400 font-mono">{errors.ideaTitle}</p>
@@ -615,7 +615,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     value={ideaDescription}
                     onChange={(e) => setIdeaDescription(e.target.value)}
                     placeholder="Изисквания или насоки (по избор)..."
-                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] p-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none resize-none"
+                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] p-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:shadow-[0_0_10px_rgba(255,255,255,0.05)] focus:outline-none resize-none transition-all"
                   />
                   {errors.ideaDescription && (
                     <p className="mt-0.5 text-xs text-red-400 font-mono">{errors.ideaDescription}</p>
@@ -657,9 +657,9 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                           triggerHaptic("selection");
                           setScope(sc.id as "SOFTWARE_ONLY" | "FULL_PACKAGE");
                         }}
-                        className={`rounded-md border p-3.5 text-left transition-colors flex flex-col justify-between ${
+                        className={`rounded-md border p-3.5 text-left transition-all flex flex-col justify-between ${
                           isSelected
-                            ? "border-zinc-200 bg-zinc-800 text-white shadow-sm"
+                            ? "border-zinc-200 bg-zinc-800 text-white shadow-[0_0_10px_rgba(255,255,255,0.06)]"
                             : "border-zinc-700/80 bg-[#18181c] text-zinc-300 hover:border-zinc-500 hover:text-white"
                         }`}
                       >
@@ -673,7 +673,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
 
                         {isExtra && (
                           <div className="mt-2 flex justify-end w-full">
-                            <span className="inline-flex items-center rounded border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-200/80">
+                            <span className="inline-flex items-center rounded border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-200/80 shadow-[0_0_8px_rgba(245,158,11,0.06)]">
                               + към крайната цена
                             </span>
                           </div>
@@ -718,9 +718,9 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                           triggerHaptic("selection");
                           setDifficulty(diff.id as "BASIC" | "STANDARD" | "ADVANCED");
                         }}
-                        className={`rounded-md border p-3 text-left transition-colors flex flex-col justify-between ${
+                        className={`rounded-md border p-3 text-left transition-all flex flex-col justify-between ${
                           isSelected
-                            ? "border-zinc-200 bg-zinc-800 text-white shadow-sm"
+                            ? "border-zinc-200 bg-zinc-800 text-white shadow-[0_0_10px_rgba(255,255,255,0.06)]"
                             : "border-zinc-700/80 bg-[#18181c] text-zinc-300 hover:border-zinc-500 hover:text-white"
                         }`}
                       >
@@ -730,10 +730,10 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                               <span className="text-sm font-semibold text-zinc-100">{diff.level}</span>
                               <span className={`text-xs font-mono font-medium rounded border px-2 py-0.5 ${
                                 diff.id === "BASIC"
-                                  ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-200/80"
+                                  ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-200/80 shadow-[0_0_8px_rgba(16,185,129,0.06)]"
                                   : diff.id === "STANDARD"
-                                  ? "border-sky-500/20 bg-sky-500/10 text-sky-200/80"
-                                  : "border-purple-500/20 bg-purple-500/10 text-purple-200/80"
+                                  ? "border-sky-500/20 bg-sky-500/10 text-sky-200/80 shadow-[0_0_8px_rgba(14,165,233,0.06)]"
+                                  : "border-purple-500/20 bg-purple-500/10 text-purple-200/80 shadow-[0_0_8px_rgba(168,85,247,0.06)]"
                               }`}>
                                 {diff.targetGrade}
                               </span>
@@ -747,7 +747,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
 
                         {isExtra && (
                           <div className="mt-2 flex justify-end w-full">
-                            <span className="inline-flex items-center rounded border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-200/80">
+                            <span className="inline-flex items-center rounded border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-200/80 shadow-[0_0_8px_rgba(245,158,11,0.06)]">
                               + към крайната цена
                             </span>
                           </div>
@@ -760,9 +760,9 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                 {/* Centered Checkbox matching T3 Code design */}
                 <div className="pt-1 flex items-center justify-center">
                   <label
-                    className={`w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-md border px-3.5 py-2.5 cursor-pointer select-none transition-colors ${
+                    className={`w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-md border px-3.5 py-2.5 cursor-pointer select-none transition-all ${
                       includeCodeComments
-                        ? "border-zinc-200 bg-zinc-800 text-white shadow-sm"
+                        ? "border-zinc-200 bg-zinc-800 text-white shadow-[0_0_10px_rgba(255,255,255,0.06)]"
                         : "border-zinc-700/80 bg-[#18181c] text-zinc-300 hover:border-zinc-500 hover:text-white"
                     }`}
                   >
@@ -796,7 +796,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     </div>
 
                     <div className="flex justify-end">
-                      <span className="inline-flex items-center rounded border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-200/80">
+                      <span className="inline-flex items-center rounded border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-200/80 shadow-[0_0_8px_rgba(245,158,11,0.06)]">
                         + към крайната цена
                       </span>
                     </div>
@@ -840,7 +840,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                           setOfferedBudget(Number(e.target.value));
                         }}
                         autoFocus
-                        className="w-24 rounded border border-zinc-600 bg-zinc-900 px-2 py-1 text-right text-base font-bold text-emerald-300/90 focus:border-zinc-300 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"   
+                        className="w-24 rounded border border-zinc-600 bg-zinc-900 px-2 py-1 text-right text-base font-bold text-emerald-300/90 focus:border-zinc-300 focus:shadow-[0_0_10px_rgba(255,255,255,0.05)] focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"   
                       />
                       <span className="text-sm text-zinc-200 font-bold">€</span>
                     </div>
@@ -902,7 +902,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     onChange={(e) => setAdditionalNotes(e.target.value)}
                     placeholder="Забележки или краен срок..."
                     autoFocus
-                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] p-3 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none resize-none leading-relaxed"
+                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] p-3 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:shadow-[0_0_10px_rgba(255,255,255,0.05)] focus:outline-none resize-none leading-relaxed transition-all"
                   />
                   {errors.additionalNotes && (
                     <p className="mt-1 text-xs text-red-400 font-mono">{errors.additionalNotes}</p>
@@ -1073,7 +1073,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                   {onOpenStatusModal && (
                     <button
                       onClick={onOpenStatusModal}
-                      className="flex-1 rounded-md border border-zinc-200 bg-white py-2.5 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 transition-colors"
+                      className="flex-1 rounded-md border border-zinc-200 bg-white py-2.5 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 transition-all shadow-[0_0_12px_rgba(255,255,255,0.12)]"
                     >
                       Провери статус
                     </button>
@@ -1101,7 +1101,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               <button
                 type="button"
                 onClick={handleNext}
-                className="inline-flex items-center gap-1 rounded-md border border-zinc-200 bg-white px-5 py-2 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 transition-colors shadow-sm"
+                className="inline-flex items-center gap-1 rounded-md border border-zinc-200 bg-white px-5 py-2 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 transition-all shadow-[0_0_12px_rgba(255,255,255,0.12)]"   
               >
                 <span>Напред</span>
                 <ChevronRight className="h-4 w-4" />
@@ -1111,7 +1111,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-6 py-2 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 disabled:opacity-50 transition-colors shadow-sm"
+                className="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-6 py-2 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 disabled:opacity-50 transition-all shadow-[0_0_12px_rgba(255,255,255,0.12)]"   
               >
                 {isSubmitting ? "Изпращане..." : "Изпрати"}
               </button>
@@ -1122,7 +1122,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
 
       {/* Why Choose Us Boxes Below */}
       <div className="w-full max-w-lg sm:max-w-xl mt-4 sm:mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
-        <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left">
+        <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left shadow-[0_0_14px_rgba(255,255,255,0.02)]">
           <MessageSquare className="h-4 w-4 text-zinc-300" />
           <div className="text-xs font-semibold text-white mt-1.5">Комуникация</div>
           <p className="text-[11px] text-zinc-400 mt-0.5 leading-snug">
@@ -1130,7 +1130,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
           </p>
         </div>
 
-        <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left">
+        <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left shadow-[0_0_14px_rgba(255,255,255,0.02)]">
           <Zap className="h-4 w-4 text-zinc-300" />
           <div className="text-xs font-semibold text-white mt-1.5">Бърза изработка</div>
           <p className="text-[11px] text-zinc-400 mt-0.5 leading-snug">
@@ -1138,7 +1138,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
           </p>
         </div>
 
-        <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left">
+        <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left shadow-[0_0_14px_rgba(255,255,255,0.02)]">
           <Coins className="h-4 w-4 text-zinc-300" />
           <div className="text-xs font-semibold text-white mt-1.5">Гъвкава цена</div>
           <p className="text-[11px] text-zinc-400 mt-0.5 leading-snug">
@@ -1146,7 +1146,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
           </p>
         </div>
 
-        <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left">
+        <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left shadow-[0_0_14px_rgba(255,255,255,0.02)]">
           <ShieldCheck className="h-4 w-4 text-zinc-300" />
           <div className="text-xs font-semibold text-white mt-1.5">Професионализъм</div>
           <p className="text-[11px] text-zinc-400 mt-0.5 leading-snug">
