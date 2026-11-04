@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const inter = Inter({
+  variable: "--font-sans",
+  subsets: ["latin", "cyrillic"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin", "cyrillic"],
 });
 
 export const metadata: Metadata = {
-  title: "Дипломни Проекти • УКТЦ Правец 2026",
+  title: "ЛЕСНА ДИПЛОМНА • УКТЦ Правец 2026",
   description:
     "Професионална платформа за заявяване, техническо съгласуване и разработка на дипломни работи за випускниците на УКТЦ.",
 };
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="bg" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-[#090a0f] text-[#f3f5f8] selection:bg-blue-600/30 selection:text-white flex flex-col font-sans`}
+        className={`${inter.variable} ${jetbrainsMono.variable} min-h-screen bg-[#09090b] text-[#f4f4f5] font-sans antialiased`}
       >
         {children}
       </body>

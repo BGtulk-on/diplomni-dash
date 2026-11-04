@@ -110,13 +110,13 @@ export async function sendTicketConfirmationEmail(data: {
   includeCodeComments?: boolean;
 }): Promise<EmailResult> {
   const difficultyMap: Record<string, string> = {
-    BASIC: "Базово ниво",
-    STANDARD: "Стандартно / Оптимално",
-    ADVANCED: "Разширено / Комплексно",
+    BASIC: "Базово (лесна 5ца)",
+    STANDARD: "Стандартно (лесна 6ца)",
+    ADVANCED: "Разширено (за любители)",
   };
   const scopeMap: Record<string, string> = {
     SOFTWARE_ONLY: "Само софтуер",
-    FULL_PACKAGE: "Софтуер + Пълна документация",
+    FULL_PACKAGE: "Софтуер + Документация",
   };
 
   const html = `
@@ -125,92 +125,86 @@ export async function sendTicketConfirmationEmail(data: {
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Потвърждение за получена заявка ${data.ticketNumber}</title>
+        <title>Заявка ${data.ticketNumber}</title>
       </head>
       <body style="margin: 0; padding: 24px 12px; background-color: #09090b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f4f4f5;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td align="center">
-              <div class="card" style="max-width: 520px; width: 100%; text-align: left; background-color: #141417; border: 1px solid #27272a; border-radius: 6px; padding: 24px; box-sizing: border-box;">
+              <div class="card" style="max-width: 480px; width: 100%; text-align: left; background-color: #121215; border: 1px solid #27272a; border-radius: 8px; padding: 24px; box-sizing: border-box;">
                 
-                <!-- Top Brand Header -->
-                <div style="border-bottom: 1px solid #27272a; padding-bottom: 12px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #71717a;">
-                    УКТЦ ПРАВЕЦ • ДИПЛОМНИ РАБОТИ
+                <!-- Top Header -->
+                <div style="border-bottom: 1px solid #27272a; padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #a1a1aa;">
+                    УКТЦ • Дипломни проекти
                   </span>
-                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: #52525b;">
+                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: #71717a;">
                     2026
                   </span>
                 </div>
 
                 <!-- Status Header -->
                 <div style="margin-bottom: 16px;">
-                  <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #34d399; margin-bottom: 6px;">
-                    <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: #10b981; margin-right: 6px; vertical-align: middle;"></span>
+                  <h1 style="font-size: 16px; font-weight: 600; color: #ffffff; margin: 0 0 4px 0;">
                     Заявката е приета
-                  </div>
-                  <h1 style="font-size: 15px; font-weight: 600; color: #f4f4f5; margin: 0 0 4px 0; letter-spacing: -0.01em;">
-                    Уникален номер на заявката
                   </h1>
-                  <p style="font-size: 12px; color: #a1a1aa; margin: 0; line-height: 1.5;">
-                    Здравейте, ${data.fullName}. Ще получите последващ имейл веднага след одобрението на проекта.
+                  <p style="font-size: 13px; color: #d4d4d8; margin: 0; line-height: 1.4;">
+                    Здравейте, ${data.fullName}. Ще получите имейл при одобрение.
                   </p>
                 </div>
 
                 <!-- Ticket Code Box -->
-                <div style="background-color: #18181b; border: 1px solid #27272a; border-radius: 6px; padding: 16px; text-align: center; margin: 18px 0;">
-                  <div style="font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; text-transform: uppercase; letter-spacing: 0.12em; color: #71717a; margin-bottom: 4px;">
+                <div style="background-color: #18181c; border: 1px solid #3f3f46; border-radius: 6px; padding: 14px; text-align: center; margin: 16px 0;">
+                  <div style="font-size: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; text-transform: uppercase; letter-spacing: 0.12em; color: #a1a1aa; margin-bottom: 4px;">
                     Номер на тикет
                   </div>
-                  <div style="font-size: 22px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-weight: 700; color: #f4f4f5; letter-spacing: 0.08em;">
+                  <div style="font-size: 24px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-weight: 700; color: #ffffff; letter-spacing: 0.08em;">
                     ${data.ticketNumber}
                   </div>
                 </div>
 
                 <!-- Details Panel -->
-                <div style="background-color: #18181b; border: 1px solid #27272a; border-radius: 6px; padding: 14px 16px; margin-bottom: 16px;">
+                <div style="background-color: #18181c; border: 1px solid #27272a; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px;">
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px;">
                     <tr>
-                      <td style="padding: 5px 0; color: #71717a; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; width: 38%;">Име:</td>
-                      <td style="padding: 5px 0; color: #f4f4f5; font-weight: 500;">${data.fullName}</td>
+                      <td style="padding: 4px 0; color: #a1a1aa; font-size: 11px; width: 36%;">Име:</td>
+                      <td style="padding: 4px 0; color: #ffffff; font-weight: 500;">${data.fullName}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 5px 0; color: #71717a; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Курсов код:</td>
-                      <td style="padding: 5px 0; color: #f4f4f5; font-weight: 700;">${data.courseNumber}</td>
+                      <td style="padding: 4px 0; color: #a1a1aa; font-size: 11px;">Курсов код:</td>
+                      <td style="padding: 4px 0; color: #ffffff; font-weight: 700;">${data.courseNumber}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 5px 0; color: #71717a; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Тема:</td>
-                      <td style="padding: 5px 0; color: #f4f4f5; font-weight: 500;">${data.ideaTitle}</td>
+                      <td style="padding: 4px 0; color: #a1a1aa; font-size: 11px;">Тема:</td>
+                      <td style="padding: 4px 0; color: #ffffff; font-weight: 500;">${data.ideaTitle}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 5px 0; color: #71717a; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Ниво на сложност:</td>
-                      <td style="padding: 5px 0; color: #d4d4d8;">${difficultyMap[data.difficulty] || data.difficulty}</td>
+                      <td style="padding: 4px 0; color: #a1a1aa; font-size: 11px;">Сложност:</td>
+                      <td style="padding: 4px 0; color: #e4e4e7;">${difficultyMap[data.difficulty] || data.difficulty}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 5px 0; color: #71717a; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Обхват:</td>
-                      <td style="padding: 5px 0; color: #d4d4d8;">${scopeMap[data.scope] || data.scope}</td>
+                      <td style="padding: 4px 0; color: #a1a1aa; font-size: 11px;">Обхват:</td>
+                      <td style="padding: 4px 0; color: #e4e4e7;">${scopeMap[data.scope] || data.scope}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 5px 0; color: #71717a; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Коментари в кода:</td>
-                      <td style="padding: 5px 0; color: #d4d4d8;">${data.includeCodeComments ? "Да (за комисия)" : "Не"}</td>
+                      <td style="padding: 4px 0; color: #a1a1aa; font-size: 11px;">Коментари:</td>
+                      <td style="padding: 4px 0; color: #e4e4e7;">${data.includeCodeComments ? "Да" : "Не"}</td>
                     </tr>
                     <tr>
-                      <td style="padding: 5px 0; color: #71717a; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">Бюджет:</td>
-                      <td style="padding: 5px 0; color: #f4f4f5; font-weight: 700;">${data.budget} €</td>
+                      <td style="padding: 4px 0; color: #a1a1aa; font-size: 11px;">Бюджет:</td>
+                      <td style="padding: 4px 0; color: #ffffff; font-weight: 700;">${data.budget} €</td>
                     </tr>
                   </table>
                 </div>
 
-                <!-- System Notice -->
-                <div style="background-color: #101114; border: 1px solid #27272a; border-radius: 6px; padding: 12px 14px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: #a1a1aa; line-height: 1.5;">
-                  <span style="color: #e4e4e7; font-weight: 600; display: block; margin-bottom: 2px;">Потвърждение по имейл:</span>
-                  Изпратено е официално системно писмо за вашето заявление. Можете да проверявате актуалния статус на заявката в портала с нейния номер.
+                <!-- Short Notice -->
+                <div style="background-color: #101114; border: 1px solid #27272a; border-radius: 6px; padding: 10px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: #d4d4d8; line-height: 1.4;">
+                  Можете да проверявате статуса в портала с номера на тикета.
                 </div>
 
                 <!-- Footer -->
-                <div style="border-top: 1px solid #27272a; margin-top: 20px; padding-top: 14px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: #71717a; text-align: center; line-height: 1.5;">
-                  Система за Академично и Инженерно Консултиране • УКТЦ 2026<br />
-                  Автоматично системно съобщение
+                <div style="border-top: 1px solid #27272a; margin-top: 18px; padding-top: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; color: #71717a; text-align: center;">
+                  УКТЦ 2026 • Автоматично съобщение
                 </div>
 
               </div>
@@ -223,7 +217,7 @@ export async function sendTicketConfirmationEmail(data: {
 
   return sendWithSandboxFallback({
     to: data.to,
-    subject: `[УКТЦ Дипломна Работа] Потвърждение за заявка ${data.ticketNumber}`,
+    subject: `[УКТЦ] Заявка ${data.ticketNumber}`,
     html,
     targetDescription: `ученик: ${data.fullName}`,
   });
@@ -239,26 +233,22 @@ export async function sendTicketStatusEmail(data: {
 }): Promise<EmailResult> {
   const isApproved = data.status === "APPROVED";
   const defaultSubject = isApproved
-    ? `[Одобрение] Вашата заявка за дипломна работа ${data.ticketNumber} е одобрена`
-    : `[Статус] Информация относно заявка за дипломна работа ${data.ticketNumber}`;
+    ? `[Одобрена] Заявка ${data.ticketNumber}`
+    : `[Статус] Заявка ${data.ticketNumber}`;
 
   const statusColor = isApproved ? "#34d399" : data.status === "DISAPPROVED" ? "#f87171" : "#fbbf24";
   const statusBgDot = isApproved ? "#10b981" : data.status === "DISAPPROVED" ? "#ef4444" : "#f59e0b";
   const statusLabel = isApproved
-    ? "Заявката е одобрена"
+    ? "Одобрена"
     : data.status === "DISAPPROVED"
-    ? "Заявката не е одобрена"
-    : "Актуализация на статус";
+    ? "Не е одобрена"
+    : "Статус";
 
   const defaultBody = isApproved
-    ? `С удоволствие ви уведомяваме, че вашата заявка за дипломна работа е официално <strong>одобрена</strong>.<br /><br />
-       <strong>Следващи стъпки:</strong><br />
-       1. Нашият водещ разработчик ще се свърже с вас по посочения канал за комуникация в рамките на 24 часа.<br />
-       2. Ще уточним детайлния план за работа, междинните прегледи и крайните срокове за предаване на софтуера и документацията.<br /><br />
-       Благодарим за доверието.`
-    : `Благодарим ви за подадената заявка за дипломен проект.<br /><br />
-       След внимателен технически анализ на актуалния капацитет и изискванията, за съжаление не можем да поемем реализацията на проекта в заявения времеви интервал или параметри.<br /><br />
-       Пожелаваме ви успех в подготовката и успешно дипломиране.`;
+    ? `Заявката ви е <strong>одобрена</strong>.<br /><br />
+       Ще се свържем с вас по посочения контакт за уточняване на сроковете и детайлите.`
+    : `За съжаление не можем да поемем проекта за посочения период.<br /><br />
+       Пожелаваме ви успех с дипломирането.`;
 
   const html = `
     <!DOCTYPE html>
@@ -272,41 +262,36 @@ export async function sendTicketStatusEmail(data: {
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr>
             <td align="center">
-              <div class="card" style="max-width: 520px; width: 100%; text-align: left; background-color: #141417; border: 1px solid #27272a; border-radius: 6px; padding: 24px; box-sizing: border-box;">
+              <div class="card" style="max-width: 480px; width: 100%; text-align: left; background-color: #121215; border: 1px solid #27272a; border-radius: 8px; padding: 24px; box-sizing: border-box;">
                 
-                <!-- Top Brand Header -->
-                <div style="border-bottom: 1px solid #27272a; padding-bottom: 12px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #71717a;">
-                    УКТЦ ПРАВЕЦ • АДМИНИСТРАТИВЕН ОТДЕЛ
+                <!-- Top Header -->
+                <div style="border-bottom: 1px solid #27272a; padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #a1a1aa;">
+                    УКТЦ • Дипломни проекти
                   </span>
-                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: #52525b;">
+                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: #71717a;">
                     2026
                   </span>
                 </div>
 
                 <!-- Status Header -->
                 <div style="margin-bottom: 16px;">
-                  <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: ${statusColor}; margin-bottom: 6px;">
-                    <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: ${statusBgDot}; margin-right: 6px; vertical-align: middle;"></span>
-                    ${statusLabel}
-                  </div>
-                  <h1 style="font-size: 15px; font-weight: 600; color: #f4f4f5; margin: 0 0 4px 0; letter-spacing: -0.01em;">
-                    ${isApproved ? "Заявката ви е приета за изпълнение" : "Информация относно вашата заявка"}
+                  <h1 style="font-size: 16px; font-weight: 600; color: #ffffff; margin: 0 0 4px 0;">
+                    ${isApproved ? "Заявката е одобрена" : "Статус на заявката"}
                   </h1>
-                  <p style="font-size: 12px; color: #a1a1aa; margin: 0; line-height: 1.5;">
-                    Здравейте, ${data.fullName}. Референтен номер на заявката: <strong style="color: #f4f4f5; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">${data.ticketNumber}</strong>
+                  <p style="font-size: 13px; color: #d4d4d8; margin: 0; line-height: 1.4;">
+                    Здравейте, ${data.fullName}. Тикет: <strong style="color: #ffffff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">${data.ticketNumber}</strong>
                   </p>
                 </div>
 
                 <!-- Content Box -->
-                <div style="background-color: #18181b; border: 1px solid #27272a; border-radius: 6px; padding: 18px; margin: 18px 0; font-size: 13px; line-height: 1.6; color: #e4e4e7;">
+                <div style="background-color: #18181c; border: 1px solid #27272a; border-radius: 6px; padding: 16px; margin: 16px 0; font-size: 13px; line-height: 1.5; color: #e4e4e7;">
                   ${data.customMessage ? data.customMessage.replace(/\n/g, "<br />") : defaultBody}
                 </div>
 
                 <!-- Footer -->
-                <div style="border-top: 1px solid #27272a; margin-top: 20px; padding-top: 14px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: #71717a; text-align: center; line-height: 1.5;">
-                  Система за Академично и Инженерно Консултиране • УКТЦ 2026<br />
-                  Автоматично системно съобщение от административния отдел
+                <div style="border-top: 1px solid #27272a; margin-top: 18px; padding-top: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; color: #71717a; text-align: center;">
+                  УКТЦ 2026 • Автоматично съобщение
                 </div>
 
               </div>

@@ -1,18 +1,23 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
 @layer base {
   :root {
     --bg-base: #09090b;
     --bg-surface: #0d0e11;
-    --bg-panel: #141417;
-    --bg-input: #18181b;
+    --bg-panel: #121215;
+    --bg-input: #18181c;
     --bg-hover: #27272a;
-    --border-base: #1f1f23;
-    --border-component: #27272a;
-    --border-active: #52525b;
-    --text-primary: #f4f4f5;
-    --text-secondary: #a1a1aa;
-    --text-muted: #71717a;
+    --border-base: #27272a;
+    --border-component: #3f3f46;
+    --border-active: #71717a;
+    --text-primary: #ffffff;
+    --text-secondary: #d4d4d8;
+    --text-muted: #a1a1aa;
   }
 
   * {
@@ -22,32 +27,48 @@
 
   html,
   body {
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
     margin: 0;
     padding: 0;
-    overflow: hidden;
     background-color: #09090b;
     color: #f4f4f5;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-family: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    user-select: none;
+    scrollbar-width: thin;
+    scrollbar-color: #3f3f46 #09090b;
   }
 
-  /* Micro hairline scrollbars */
-  ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+  /* Micro hairline scrollbars only for body and explicit scroll containers */
+  body::-webkit-scrollbar,
+  .overflow-y-auto::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
   }
-  ::-webkit-scrollbar-track {
+  body::-webkit-scrollbar-track,
+  .overflow-y-auto::-webkit-scrollbar-track {
     background: #09090b;
   }
-  ::-webkit-scrollbar-thumb {
-    background: #27272a;
-    border-radius: 2px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
+  body::-webkit-scrollbar-thumb,
+  .overflow-y-auto::-webkit-scrollbar-thumb {
     background: #3f3f46;
+    border-radius: 3px;
+  }
+  body::-webkit-scrollbar-thumb:hover,
+  .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #52525b;
+  }
+
+  /* Hide number input spinners / arrows */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
   }
 }

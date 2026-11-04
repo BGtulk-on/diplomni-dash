@@ -63,14 +63,14 @@ export function StatusCheckerModal({ isOpen, onClose, initialTicket = "" }: Stat
 
       if (!res.ok) {
         triggerHaptic("error");
-        setError(data.error || "Не бе открита заявка с посочения номер.");
+        setError(data.error || "Тикетът не е намерен.");
       } else {
         triggerHaptic("success");
         setTicket(data.ticket);
       }
     } catch {
       triggerHaptic("error");
-      setError("Възникна грешка при връзка със сървъра.");
+      setError("Грешка при връзката.");
     } finally {
       setLoading(false);
     }
@@ -82,14 +82,14 @@ export function StatusCheckerModal({ isOpen, onClose, initialTicket = "" }: Stat
         return (
           <span className="inline-flex items-center gap-1.5 rounded border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-mono text-emerald-400">
             <CheckCircle2 className="h-3 w-3" />
-            Одобрена заявка
+            Одобрен
           </span>
         );
       case "DISAPPROVED":
         return (
           <span className="inline-flex items-center gap-1.5 rounded border border-red-500/20 bg-red-500/10 px-2 py-0.5 text-[11px] font-mono text-red-400">
             <XCircle className="h-3 w-3" />
-            Не е одобрена
+            Отхвърлен
           </span>
         );
       case "IN_PROGRESS":
@@ -138,22 +138,22 @@ export function StatusCheckerModal({ isOpen, onClose, initialTicket = "" }: Stat
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 8 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] as const }}
-            className="relative w-full max-w-md rounded-md border border-zinc-800 bg-[#0d0e11] p-5 shadow-2xl z-10"
+            className="relative w-full max-w-md rounded-xl border border-zinc-700/80 bg-[#121215] p-6 shadow-2xl z-10"
           >
             <button
               onClick={() => {
                 triggerHaptic("selection");
                 onClose();
               }}
-              className="absolute right-3.5 top-3.5 rounded p-1 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-200 transition-colors"
+              className="absolute right-4 top-4 rounded-md p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
 
             <div className="mb-4">
-              <h3 className="text-sm font-semibold text-zinc-100">Проверка на статус на тикет</h3>
-              <p className="text-[12px] text-zinc-400 mt-0.5">
-                Въведете вашия входящ номер (напр. UKTC-2026-XXXX).
+              <h3 className="text-base font-semibold text-white">Статус на тикет</h3>
+              <p className="text-xs sm:text-sm text-zinc-300 mt-0.5">
+                Въведете входящ номер.
               </p>
             </div>
 
@@ -163,47 +163,47 @@ export function StatusCheckerModal({ isOpen, onClose, initialTicket = "" }: Stat
                 value={ticketInput}
                 onChange={(e) => setTicketInput(e.target.value.toUpperCase())}
                 placeholder="UKTC-2026-..."
-                className="flex-1 rounded-md border border-zinc-800 bg-[#141417] px-3 py-1.5 text-xs font-mono text-zinc-100 placeholder-zinc-600 focus:border-zinc-500 focus:outline-none"
+                className="flex-1 rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2 text-sm font-mono text-white placeholder-zinc-500 focus:border-blue-500/70 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all"
               />
               <button
                 type="submit"
                 disabled={loading || !ticketInput.trim()}
-                className="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-zinc-100 px-3 py-1.5 text-xs font-medium text-zinc-950 hover:bg-zinc-200 disabled:opacity-50 transition-colors"
+                className="inline-flex items-center gap-1.5 rounded-md border border-blue-500/40 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 px-4 py-2 text-xs sm:text-sm font-semibold text-white disabled:opacity-50 transition-all shadow-md shadow-blue-500/20"
               >
                 {loading ? "..." : "Провери"}
-                <ArrowRight className="h-3 w-3" />
+                <ArrowRight className="h-4 w-4" />
               </button>
             </form>
 
             {error && (
-              <div className="rounded-md border border-red-500/30 bg-red-950/20 p-2.5 text-xs text-red-400">
+              <div className="rounded-md border border-red-500/40 bg-red-950/30 p-2.5 text-xs text-red-300">
                 {error}
               </div>
             )}
 
             {ticket && (
-              <div className="mt-4 rounded-md border border-zinc-800 bg-[#141417] p-3.5 text-xs space-y-3">
-                <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2.5">
+              <div className="mt-4 rounded-md border border-zinc-700 bg-[#18181c] p-4 text-xs font-mono space-y-3">
+                <div className="flex items-center justify-between border-b border-zinc-700/80 pb-2.5">
                   <div>
-                    <span className="text-[11px] text-zinc-500 uppercase tracking-wider font-mono">Номер</span>
-                    <div className="font-mono text-xs font-semibold text-zinc-100">{ticket.ticketNumber}</div>
+                    <span className="text-[11px] text-zinc-400 uppercase tracking-wider font-mono font-medium">Номер</span>
+                    <div className="font-mono text-sm font-bold text-white mt-0.5">{ticket.ticketNumber}</div>
                   </div>
                   <div>{getStatusBadge(ticket.status)}</div>
                 </div>
 
                 <div>
-                  <span className="text-[11px] text-zinc-500 uppercase tracking-wider font-mono">Тема</span>
-                  <p className="text-zinc-200 font-medium text-xs mt-0.5">{ticket.ideaTitle}</p>
+                  <span className="text-[11px] text-zinc-400 uppercase tracking-wider font-mono font-medium">Тема</span>
+                  <p className="text-zinc-100 font-medium text-xs sm:text-sm mt-0.5">{ticket.ideaTitle}</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-[12px] pt-1 border-t border-zinc-800/80">
+                <div className="grid grid-cols-2 gap-2 text-xs pt-1.5 border-t border-zinc-700/80">
                   <div>
-                    <span className="text-zinc-500 text-[11px]">Курсов код:</span>
-                    <p className="text-zinc-300 font-mono">{ticket.courseNumber}</p>
+                    <span className="text-zinc-400 text-[11px]">Курсов код:</span>
+                    <p className="text-white font-mono font-semibold">{ticket.courseNumber}</p>
                   </div>
                   <div>
-                    <span className="text-zinc-500 text-[11px]">Сложност:</span>
-                    <p className="text-zinc-300">
+                    <span className="text-zinc-400 text-[11px]">Сложност:</span>
+                    <p className="text-zinc-200 font-medium">
                       {ticket.difficulty === "BASIC"
                         ? "Базово"
                         : ticket.difficulty === "STANDARD"
