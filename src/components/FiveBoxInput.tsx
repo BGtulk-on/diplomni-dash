@@ -101,12 +101,8 @@ export function FiveBoxInput({ value, onChange, error }: FiveBoxInputProps) {
             onKeyDown={(e) => handleKeyDown(i, e)}
             onFocus={(e) => e.target.select()}
             onPaste={handlePaste}
-            className={`h-12 w-11 sm:h-14 sm:w-12 rounded-md border text-center font-mono text-lg sm:text-xl font-bold tracking-wider text-white transition-all focus:border-sky-400 focus:ring-2 focus:ring-sky-500/20 focus:outline-none ${
-              error
-                ? "border-red-500/80 bg-red-950/30 text-red-200"
-                : chars[i]
-                ? "border-sky-500/50 bg-sky-950/20 text-sky-200"
-                : "border-zinc-700 bg-[#18181c] hover:border-zinc-500"
+            className={`h-12 w-11 sm:h-14 sm:w-12 rounded-md border text-center font-mono text-lg sm:text-xl font-bold tracking-wider text-white transition-colors focus:border-zinc-200 focus:outline-none ${
+              error ? "border-red-500/80 bg-red-950/30 text-red-200" : "border-zinc-700 bg-[#18181c] hover:border-zinc-500"   
             }`}
           />
         ))}

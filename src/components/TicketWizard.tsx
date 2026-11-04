@@ -70,6 +70,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
   const [hasCustomIdea, setHasCustomIdea] = useState(true);
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
   const [presetScroled, setPresetScroled] = useState(false);
+  const [presetAtEnd, setPresetAtEnd] = useState(false);   
   const [ideaTitle, setIdeaTitle] = useState("");
   const [ideaDescription, setIdeaDescription] = useState("");
 
@@ -340,35 +341,28 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
       />
 
       {/* Brand Header */}
-      <div className="text-center mb-4 sm:mb-5 space-y-1.5 max-w-md">
-        <div className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 px-3 py-0.5 text-[11px] sm:text-xs font-mono font-medium text-sky-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse" />
-          <span>УКТЦ Правец • 2026</span>
-        </div>
+      <div className="text-center mb-4 sm:mb-5 max-w-md">
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase">
           ЛЕСНА ДИПЛОМНА
         </h1>
-        <p className="text-xs sm:text-sm text-zinc-400">
-          Бързо и сигурно съгласуване на твоя дипломен проект.
-        </p>
       </div>
 
       {/* Main Centered Box with fluid mobile support */}
       <div className="wizard-card w-full max-w-lg rounded-xl border border-zinc-700/80 bg-[#121215] p-5 sm:p-7 shadow-2xl flex flex-col justify-between">
-        {/* Sleek animated progress bar with soft cyan/blue accent */}
+        {/* Sleek animated progress bar */}
         {currentStep <= 10 && (
           <div className="mb-5 space-y-1.5 shrink-0">
             <div className="flex items-center justify-between text-xs font-mono text-zinc-300">
               <span className="uppercase tracking-wider text-zinc-400 font-medium">
                 {currentStep <= 9 ? `Въпрос ${currentStep} от ${totalQuestions}` : "Преглед"}
               </span>
-              <span className="font-semibold text-sky-400 font-mono">
+              <span className="font-semibold text-white">
                 {Math.round((Math.min(currentStep, 10) / 10) * 100)}%
               </span>
             </div>
             <div className="h-1.5 w-full rounded-full bg-zinc-800 overflow-hidden border border-zinc-700/60">
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-sky-400 shadow-[0_0_8px_rgba(59,130,246,0.4)]"
+                className="h-full rounded-full bg-white"
                 initial={false}
                 animate={{ width: `${(Math.min(currentStep, 10) / 10) * 100}%` }}
                 transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] as const }}
@@ -405,7 +399,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Мартин"
-                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-blue-500/70 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all"
+                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none transition-colors"   
                   />
                   {errors.fullName && (
                     <p className="mt-1.5 text-xs text-red-400 font-mono">{errors.fullName}</p>
@@ -431,7 +425,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                   </h2>
                   <p className="text-xs sm:text-sm text-zinc-300">
                     5 знака:{" "}
-                    <span className="font-mono text-sky-300 font-semibold bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">
+                    <span className="font-mono text-emerald-300/90 font-semibold">
                       {courseCode ? `${courseCode.toLowerCase()}@uktc-bg.com` : "xxxxx@uktc-bg.com"}
                     </span>
                   </p>
@@ -475,7 +469,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                       onChange={(e) => setCommPlatform(e.target.value)}
                       placeholder="Платформа (Discord, Telegram...)"
                       autoFocus
-                      className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-blue-500/70 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all"
+                      className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none transition-colors"
                     />
                     {errors.commPlatform && (
                       <p className="mt-1 text-xs text-red-400 font-mono">{errors.commPlatform}</p>
@@ -488,7 +482,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                       value={commHandle}
                       onChange={(e) => setCommHandle(e.target.value)}
                       placeholder="Потребителско име или тел."
-                      className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-blue-500/70 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all"
+                      className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none transition-colors"
                     />
                     {errors.commHandle && (
                       <p className="mt-1 text-xs text-red-400 font-mono">{errors.commHandle}</p>
@@ -525,7 +519,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     onChange={(e) => setSupervisor(e.target.value)}
                     placeholder="пр: Гоцева"
                     autoFocus
-                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-blue-500/70 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all"
+                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none transition-colors"
                   />
                   {errors.supervisor && (
                     <p className="mt-1 text-xs text-red-400 font-mono">{errors.supervisor}</p>
@@ -555,13 +549,19 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                 </div>
 
                 <div className="relative">
-                  {presetScroled && (
-                    <div className="pointer-events-none absolute top-0 left-0 right-0 h-5 bg-gradient-to-b from-[#121215] via-[#121215]/80 to-transparent backdrop-blur-[2px] transition-opacity duration-150 z-10" />
-                  )}
+                  <div
+                    className={`pointer-events-none absolute top-0 left-0 right-0 h-6 bg-gradient-to-b from-[#121215] via-[#121215]/80 to-transparent backdrop-blur-[2px] [mask-image:linear-gradient(to_bottom,black_35%,transparent_100%)] transition-opacity duration-200 z-10 ${
+                      presetScroled ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
 
                   <div
-                    onScroll={(e) => setPresetScroled(e.currentTarget.scrollTop > 8)}
-                    className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-44 overflow-y-auto pr-1 pb-3.5"
+                    onScroll={(e) => {
+                      const el = e.currentTarget;
+                      setPresetScroled( el.scrollTop > 6 );
+                      setPresetAtEnd( el.scrollTop + el.clientHeight >= el.scrollHeight - 6 );   
+                    }}
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-44 overflow-y-auto pr-1 pb-1"
                   >
                     {PROJECT_THEME_PRESETS.map((preset) => {
                       const isSelected = selectedPreset === preset.id;
@@ -570,15 +570,15 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                           key={preset.id}
                           type="button"
                           onClick={() => handleSelectPreset(preset.id)}
-                          className={`rounded-md border p-2.5 text-left transition-all ${
+                          className={`rounded-md border p-2.5 text-left transition-colors ${
                             isSelected
-                              ? "border-blue-500/70 bg-blue-950/25 text-white shadow-[0_0_12px_rgba(59,130,246,0.12)]"
+                              ? "border-zinc-200 bg-zinc-800 text-white shadow-sm"
                               : "border-zinc-700/80 bg-[#18181c] text-zinc-300 hover:border-zinc-500 hover:text-white"
                           }`}
                         >
                           <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 font-medium">
-                            <span className={isSelected ? "text-sky-300" : ""}>{preset.category}</span>
-                            {isSelected && <Check className="h-3 w-3 text-sky-400" />}
+                            <span>{preset.category}</span>
+                            {isSelected && <Check className="h-3 w-3 text-white" />}
                           </div>
                           <div className="text-xs sm:text-sm font-medium text-zinc-100 mt-1 leading-snug">
                             {preset.title}
@@ -589,7 +589,11 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                   </div>
 
                   {/* Premium bottom blur & gradient transition */}
-                  <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#121215] via-[#121215]/85 to-transparent backdrop-blur-[2px] z-10" />
+                  <div
+                    className={`pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#121215] via-[#121215]/85 to-transparent backdrop-blur-[2px] [mask-image:linear-gradient(to_top,black_35%,transparent_100%)] transition-opacity duration-200 z-10 ${
+                      presetAtEnd ? "opacity-0" : "opacity-100"
+                    }`}
+                  />
                 </div>
 
                 <div>
@@ -598,7 +602,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     value={ideaTitle}
                     onChange={(e) => setIdeaTitle(e.target.value)}
                     placeholder="Заглавие на темата"
-                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2 text-sm text-white placeholder-zinc-500 focus:border-blue-500/70 focus:ring-1 focus:ring-blue-500/20 focus:outline-none transition-all"
+                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] px-3.5 py-2 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none"
                   />
                   {errors.ideaTitle && (
                     <p className="mt-1 text-xs text-red-400 font-mono">{errors.ideaTitle}</p>
@@ -611,7 +615,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     value={ideaDescription}
                     onChange={(e) => setIdeaDescription(e.target.value)}
                     placeholder="Изисквания или насоки (по избор)..."
-                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] p-2.5 text-sm text-white placeholder-zinc-500 focus:border-blue-500/70 focus:ring-1 focus:ring-blue-500/20 focus:outline-none resize-none transition-all"
+                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] p-2.5 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none resize-none"
                   />
                   {errors.ideaDescription && (
                     <p className="mt-0.5 text-xs text-red-400 font-mono">{errors.ideaDescription}</p>
@@ -653,23 +657,23 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                           triggerHaptic("selection");
                           setScope(sc.id as "SOFTWARE_ONLY" | "FULL_PACKAGE");
                         }}
-                        className={`rounded-md border p-3.5 text-left transition-all flex flex-col justify-between ${
+                        className={`rounded-md border p-3.5 text-left transition-colors flex flex-col justify-between ${
                           isSelected
-                            ? "border-blue-500/70 bg-blue-950/25 text-white shadow-[0_0_12px_rgba(59,130,246,0.12)]"
+                            ? "border-zinc-200 bg-zinc-800 text-white shadow-sm"
                             : "border-zinc-700/80 bg-[#18181c] text-zinc-300 hover:border-zinc-500 hover:text-white"
                         }`}
                       >
                         <div className="flex items-center justify-between w-full">
                           <div>
-                            <div className={`text-sm font-semibold ${isSelected ? "text-white" : "text-zinc-100"}`}>{sc.title}</div>
+                            <div className="text-sm font-semibold text-zinc-100">{sc.title}</div>
                             <div className="text-xs text-zinc-300 mt-0.5">{sc.subtitle}</div>
                           </div>
-                          {isSelected && <Check className="h-4 w-4 text-sky-400 shrink-0" />}
+                          {isSelected && <Check className="h-4 w-4 text-white shrink-0" />}
                         </div>
 
                         {isExtra && (
                           <div className="mt-2 flex justify-end w-full">
-                            <span className="inline-flex items-center rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-300">
+                            <span className="inline-flex items-center rounded border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-200/80">
                               + към крайната цена
                             </span>
                           </div>
@@ -714,27 +718,27 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                           triggerHaptic("selection");
                           setDifficulty(diff.id as "BASIC" | "STANDARD" | "ADVANCED");
                         }}
-                        className={`rounded-md border p-3 text-left transition-all flex flex-col justify-between ${
+                        className={`rounded-md border p-3 text-left transition-colors flex flex-col justify-between ${
                           isSelected
-                            ? "border-blue-500/70 bg-blue-950/25 text-white shadow-[0_0_12px_rgba(59,130,246,0.12)]"
+                            ? "border-zinc-200 bg-zinc-800 text-white shadow-sm"
                             : "border-zinc-700/80 bg-[#18181c] text-zinc-300 hover:border-zinc-500 hover:text-white"
                         }`}
                       >
                         <div className="w-full">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
-                              <span className={`text-sm font-semibold ${isSelected ? "text-white" : "text-zinc-100"}`}>{diff.level}</span>
+                              <span className="text-sm font-semibold text-zinc-100">{diff.level}</span>
                               <span className={`text-xs font-mono font-medium rounded border px-2 py-0.5 ${
                                 diff.id === "BASIC"
-                                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                                  ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-200/80"
                                   : diff.id === "STANDARD"
-                                  ? "border-sky-500/30 bg-sky-500/10 text-sky-300"
-                                  : "border-purple-500/30 bg-purple-500/10 text-purple-300"
+                                  ? "border-sky-500/20 bg-sky-500/10 text-sky-200/80"
+                                  : "border-purple-500/20 bg-purple-500/10 text-purple-200/80"
                               }`}>
                                 {diff.targetGrade}
                               </span>
                             </div>
-                            {isSelected && <Check className="h-4 w-4 text-sky-400" />}
+                            {isSelected && <Check className="h-4 w-4 text-white" />}
                           </div>
                           <div className="text-xs text-zinc-300 mt-1 leading-relaxed">
                             {diff.description}
@@ -743,7 +747,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
 
                         {isExtra && (
                           <div className="mt-2 flex justify-end w-full">
-                            <span className="inline-flex items-center rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-300">
+                            <span className="inline-flex items-center rounded border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-200/80">
                               + към крайната цена
                             </span>
                           </div>
@@ -756,9 +760,9 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                 {/* Centered Checkbox matching T3 Code design */}
                 <div className="pt-1 flex items-center justify-center">
                   <label
-                    className={`w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-md border px-3.5 py-2.5 cursor-pointer select-none transition-all ${
+                    className={`w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-md border px-3.5 py-2.5 cursor-pointer select-none transition-colors ${
                       includeCodeComments
-                        ? "border-blue-500/70 bg-blue-950/25 text-white shadow-[0_0_12px_rgba(59,130,246,0.12)]"
+                        ? "border-zinc-200 bg-zinc-800 text-white shadow-sm"
                         : "border-zinc-700/80 bg-[#18181c] text-zinc-300 hover:border-zinc-500 hover:text-white"
                     }`}
                   >
@@ -766,7 +770,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                       <div
                         className={`h-4 w-4 rounded border flex items-center justify-center transition-colors shrink-0 ${
                           includeCodeComments
-                            ? "border-blue-500 bg-blue-600 text-white"
+                            ? "border-zinc-200 bg-zinc-100 text-zinc-950"
                             : "border-zinc-500 bg-zinc-900"
                         }`}
                       >
@@ -792,7 +796,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     </div>
 
                     <div className="flex justify-end">
-                      <span className="inline-flex items-center rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-300">
+                      <span className="inline-flex items-center rounded border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-xs font-mono font-medium text-amber-200/80">
                         + към крайната цена
                       </span>
                     </div>
@@ -836,9 +840,9 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                           setOfferedBudget(Number(e.target.value));
                         }}
                         autoFocus
-                        className="w-24 rounded border border-zinc-600 bg-zinc-900 px-2 py-1 text-right text-base font-bold text-sky-300 focus:border-sky-500/70 focus:ring-1 focus:ring-sky-500/20 focus:outline-none transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        className="w-24 rounded border border-zinc-600 bg-zinc-900 px-2 py-1 text-right text-base font-bold text-emerald-300/90 focus:border-zinc-300 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"   
                       />
-                      <span className="text-sm text-sky-400 font-bold">€</span>
+                      <span className="text-sm text-zinc-200 font-bold">€</span>
                     </div>
                   </div>
 
@@ -852,7 +856,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                       triggerHaptic("selection");
                       setOfferedBudget(Number(e.target.value));
                     }}
-                    className="w-full accent-blue-500 cursor-pointer"
+                    className="w-full accent-white cursor-pointer"
                   />
                   <div className="flex justify-between text-xs font-mono text-zinc-400 font-medium">
                     <span>150 €</span>
@@ -898,7 +902,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     onChange={(e) => setAdditionalNotes(e.target.value)}
                     placeholder="Забележки или краен срок..."
                     autoFocus
-                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] p-3 text-sm text-white placeholder-zinc-500 focus:border-blue-500/70 focus:ring-1 focus:ring-blue-500/20 focus:outline-none resize-none leading-relaxed transition-all"
+                    className="w-full rounded-md border border-zinc-700 bg-[#18181c] p-3 text-sm text-white placeholder-zinc-500 focus:border-zinc-300 focus:outline-none resize-none leading-relaxed"
                   />
                   {errors.additionalNotes && (
                     <p className="mt-1 text-xs text-red-400 font-mono">{errors.additionalNotes}</p>
@@ -932,11 +936,11 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     </div>
                     <div>
                       <span className="text-[11px] text-zinc-400 uppercase font-medium block">Курсов код:</span>
-                      <span className="text-sky-300 font-bold text-sm">{courseCode}</span>
+                      <span className="text-white font-bold text-sm">{courseCode}</span>
                     </div>
                     <div>
                       <span className="text-[11px] text-zinc-400 uppercase font-medium block">Служебен имейл:</span>
-                      <span className="text-sky-300 text-xs">{courseCode.toLowerCase()}@uktc-bg.com</span>
+                      <span className="text-zinc-200 text-xs">{courseCode.toLowerCase()}@uktc-bg.com</span>
                     </div>
                     <div>
                       <span className="text-[11px] text-zinc-400 uppercase font-medium block">Връзка:</span>
@@ -976,7 +980,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                     </div>
                     <div>
                       <span className="text-[11px] text-zinc-400 uppercase font-medium block">Бюджет:</span>
-                      <span className="text-emerald-400 font-bold text-sm">{offeredBudget} €</span>
+                      <span className="text-emerald-300/90 font-bold text-sm">{offeredBudget} €</span>
                     </div>
                   </div>
                 </div>
@@ -1018,12 +1022,12 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                   <div className="text-xs font-mono uppercase tracking-widest text-zinc-400 font-medium">
                     Номер на тикет
                   </div>
-                  <div className="font-mono text-3xl font-bold tracking-wider text-sky-400 drop-shadow-[0_0_12px_rgba(56,189,248,0.25)]">
+                  <div className="font-mono text-3xl font-bold tracking-wider text-white">
                     {submittedTicket.ticketNumber}
                   </div>
                   <button
                     onClick={copyTicket}
-                    className="inline-flex items-center gap-1.5 rounded-md border border-sky-500/30 bg-sky-950/30 px-3 py-1.5 text-xs font-mono text-sky-200 hover:bg-sky-900/40 transition-colors"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-zinc-600 bg-zinc-800 px-3 py-1.5 text-xs font-mono text-white hover:bg-zinc-700 transition-colors"
                   >
                     {copied ? (
                       <>
@@ -1032,7 +1036,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                       </>
                     ) : (
                       <>
-                        <Copy className="h-3.5 w-3.5 text-sky-400" />
+                        <Copy className="h-3.5 w-3.5" />
                         <span>Копирай номер</span>
                       </>
                     )}
@@ -1042,7 +1046,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                 <div className="rounded-md border border-zinc-700 bg-[#101114] p-3 text-xs font-mono text-zinc-300 space-y-1">
                   <div className="text-white font-medium">Имейл:</div>
                   <div>
-                    Изпратено е писмо на <span className="text-sky-300 font-semibold">{submittedTicket.email}</span>.
+                    Изпратено е писмо на <span className="text-zinc-100 font-semibold">{submittedTicket.email}</span>.
                   </div>
                 </div>
 
@@ -1069,7 +1073,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                   {onOpenStatusModal && (
                     <button
                       onClick={onOpenStatusModal}
-                      className="flex-1 rounded-md border border-blue-500/40 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 py-2.5 text-xs sm:text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition-all"
+                      className="flex-1 rounded-md border border-zinc-200 bg-white py-2.5 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 transition-colors"
                     >
                       Провери статус
                     </button>
@@ -1097,7 +1101,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               <button
                 type="button"
                 onClick={handleNext}
-                className="inline-flex items-center gap-1 rounded-md border border-blue-500/40 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 px-5 py-2 text-xs sm:text-sm font-semibold text-white transition-all shadow-[0_0_15px_rgba(37,99,235,0.25)] active:scale-[0.98]"
+                className="inline-flex items-center gap-1 rounded-md border border-zinc-200 bg-white px-5 py-2 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 transition-colors shadow-sm"
               >
                 <span>Напред</span>
                 <ChevronRight className="h-4 w-4" />
@@ -1107,7 +1111,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="inline-flex items-center gap-1.5 rounded-md border border-blue-500/40 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 px-6 py-2 text-xs sm:text-sm font-semibold text-white disabled:opacity-50 transition-all shadow-[0_0_15px_rgba(37,99,235,0.25)] active:scale-[0.98]"
+                className="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-6 py-2 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 disabled:opacity-50 transition-colors shadow-sm"
               >
                 {isSubmitting ? "Изпращане..." : "Изпрати"}
               </button>
@@ -1119,9 +1123,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
       {/* Why Choose Us Boxes Below */}
       <div className="w-full max-w-lg sm:max-w-xl mt-4 sm:mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
         <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left">
-          <div className="inline-flex p-1 rounded-md bg-sky-500/10 text-sky-400 border border-sky-500/20">
-            <MessageSquare className="h-3.5 w-3.5" />
-          </div>
+          <MessageSquare className="h-4 w-4 text-zinc-300" />
           <div className="text-xs font-semibold text-white mt-1.5">Комуникация</div>
           <p className="text-[11px] text-zinc-400 mt-0.5 leading-snug">
             Директна връзка за всяка идея.
@@ -1129,9 +1131,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
         </div>
 
         <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left">
-          <div className="inline-flex p-1 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20">
-            <Zap className="h-3.5 w-3.5" />
-          </div>
+          <Zap className="h-4 w-4 text-zinc-300" />
           <div className="text-xs font-semibold text-white mt-1.5">Бърза изработка</div>
           <p className="text-[11px] text-zinc-400 mt-0.5 leading-snug">
             Кратки и точни срокове.
@@ -1139,9 +1139,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
         </div>
 
         <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left">
-          <div className="inline-flex p-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-            <Coins className="h-3.5 w-3.5" />
-          </div>
+          <Coins className="h-4 w-4 text-zinc-300" />
           <div className="text-xs font-semibold text-white mt-1.5">Гъвкава цена</div>
           <p className="text-[11px] text-zinc-400 mt-0.5 leading-snug">
             По договаряне, без фиксирани суми.
@@ -1149,9 +1147,7 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
         </div>
 
         <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left">
-          <div className="inline-flex p-1 rounded-md bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-            <ShieldCheck className="h-3.5 w-3.5" />
-          </div>
+          <ShieldCheck className="h-4 w-4 text-zinc-300" />
           <div className="text-xs font-semibold text-white mt-1.5">Професионализъм</div>
           <p className="text-[11px] text-zinc-400 mt-0.5 leading-snug">
             Опит и качествено изпълнение.
