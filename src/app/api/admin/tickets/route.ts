@@ -17,7 +17,11 @@ export async function GET(req: NextRequest) {
     const whereClause: Record<string, unknown> = {};
 
     if (status && status !== "ALL") {
-      whereClause.status = status;
+      if (status.includes(",")) {
+        whereClause.status = { in: status.split(",") };   
+      } else {
+        whereClause.status = status;
+      }
     }
     if (course && course !== "ALL") {
       whereClause.courseNumber = course;

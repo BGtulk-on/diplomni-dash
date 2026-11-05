@@ -96,10 +96,12 @@ export default function AdminPage() {
   const [showGraph, setShowGraph] = useState(true);
   const [rotAngl, setRotAngl] = useState({ x: -18, y: -26 });   
   const [isDragin, setIsDragin] = useState(false);
+  const [touchPt, setTouchPt] = useState<{ x: number; y: number } | null>(null);
 
-  const maxValu = Math.max( stats.pending, stats.inProgress, stats.completed, 1 ) ;
+  const pendCount = stats.pending + stats.approved ;   
+  const maxValu = Math.max( pendCount, stats.inProgress, stats.completed, 1 ) ;
   const barsList = [
-    { key: "PENDING", label: "Чакащи", val: stats.pending, frontBg: "rgba(245, 158, 11, 0.78)", sideBg: "rgba(180, 83, 9, 0.85)", topBg: "rgba(252, 211, 77, 0.9)", glow: "rgba(245, 158, 11, 0.18)", textCol: "text-amber-300" },
+    { key: "PENDING,APPROVED", label: "Чакащи", val: pendCount, frontBg: "rgba(245, 158, 11, 0.78)", sideBg: "rgba(180, 83, 9, 0.85)", topBg: "rgba(252, 211, 77, 0.9)", glow: "rgba(245, 158, 11, 0.18)", textCol: "text-amber-300" },
     { key: "IN_PROGRESS", label: "В разработка", val: stats.inProgress, frontBg: "rgba(56, 189, 248, 0.78)", sideBg: "rgba(3, 105, 161, 0.85)", topBg: "rgba(125, 211, 252, 0.9)", glow: "rgba(56, 189, 248, 0.18)", textCol: "text-sky-300" },
     { key: "COMPLETED", label: "Завършени", val: stats.completed, frontBg: "rgba(16, 185, 129, 0.78)", sideBg: "rgba(4, 120, 87, 0.85)", topBg: "rgba(110, 231, 183, 0.9)", glow: "rgba(16, 185, 129, 0.18)", textCol: "text-emerald-300" },
   ] ;   
@@ -306,7 +308,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="h-[100dvh] w-screen overflow-hidden flex flex-col bg-[#09090b] text-[#f4f4f5]">
+    <div className="min-h-[100dvh] md:h-[100dvh] w-screen overflow-x-hidden md:overflow-hidden flex flex-col bg-[#09090b] text-[#f4f4f5]">
       {/* Top Bar */}
       <div className="h-10 border-b border-[#1f1f23] bg-[#0d0e11] px-4 flex items-center justify-between text-xs font-mono shrink-0">
         <div className="flex items-center gap-3">
@@ -498,10 +500,6 @@ export default function AdminPage() {
                       );
                     })}
                   </div>
-
-                  <p className="text-[10px] font-mono text-zinc-500">
-                    Задръж и влачи с мишката за 3D въртене • Кликни стълб за филтър.
-                  </p>
                 </div>
 
                 {/* Right 3D Stage */}
@@ -516,11 +514,27 @@ export default function AdminPage() {
                       y: Math.max( -65, Math.min( 65, prev.y + e.movementX * 0.5 ) ),
                     }));
                   }}
-                  className="flex-1 w-full h-44 sm:h-48 flex items-center justify-center select-none cursor-grab active:cursor-grabbing overflow-hidden"
+                  onTouchStart={(e) => {
+                    const t = e.touches[0];
+                    if (t) setTouchPt({ x: t.clientX, y: t.clientY });
+                  }}
+                  onTouchMove={(e) => {
+                    const t = e.touches[0];
+                    if (!t || !touchPt) return;
+                    const dx = t.clientX - touchPt.x;
+                    const dy = t.clientY - touchPt.y;
+                    setTouchPt({ x: t.clientX, y: t.clientY });
+                    setRotAngl((prev) => ({
+                      x: Math.max( -40, Math.min( -5, prev.x - dy * 0.4 ) ),
+                      y: Math.max( -65, Math.min( 65, prev.y + dx * 0.5 ) ),
+                    }));
+                  }}
+                  onTouchEnd={() => setTouchPt(null)}
+                  className="flex-1 w-full h-40 sm:h-48 flex items-center justify-center select-none cursor-grab active:cursor-grabbing overflow-hidden touch-none"
                   style={{ perspective: "900px" }}
                 >
                   <div
-                    className="relative w-64 h-36 transition-transform duration-75 ease-out"
+                    className="relative w-64 h-36 scale-90 sm:scale-100 transition-transform duration-75 ease-out"
                     style={{
                       transformStyle: "preserve-3d",
                       transform: `rotateX(${rotAngl.x}deg) rotateY(${rotAngl.y}deg)`,
@@ -645,7 +659,7 @@ export default function AdminPage() {
 
           {/* Search bar */}
           <div className="border-b border-[#1f1f23] bg-[#09090b] px-4 py-2 shrink-0">
-            <div className="relative">
+            <div className="relative max-w-5xl mx-auto">
               <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-zinc-500" />
               <input
                 type="text"
@@ -658,7 +672,8 @@ export default function AdminPage() {
           </div>
 
           {/* Scrollable ticket list table */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="max-w-5xl mx-auto space-y-2">
             {tickets.length === 0 ? (
               <div className="py-12 text-center text-xs text-zinc-500 font-mono">
                 Няма намерени тикети.
@@ -749,8 +764,8 @@ export default function AdminPage() {
                         </div>
 
                         {/* 1-click Resend Actions */}
-                        <div className="flex items-center justify-between pt-1">
-                          <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                             <button
                               onClick={() => handleSendEmailAction(t.id, "APPROVE_EMAIL")}
                               className="rounded border border-emerald-500/30 bg-emerald-950/20 px-2.5 py-1 text-[11px] font-mono text-emerald-400 hover:bg-emerald-950/40"
@@ -788,6 +803,7 @@ export default function AdminPage() {
                 );
               })
             )}
+            </div>
           </div>
         </div>
       )}
