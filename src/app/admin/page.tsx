@@ -93,6 +93,18 @@ export default function AdminPage() {
   const [bannerMsg, setBannerMsg] = useState<{ text: string; type: "success" | "error" } | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
+  const [showGraph, setShowGraph] = useState(true);
+  const [rotAngl, setRotAngl] = useState({ x: -18, y: -26 });   
+  const [isDragin, setIsDragin] = useState(false);
+
+  const maxValu = Math.max( stats.pending, stats.inProgress, stats.completed, 1 ) ;
+  const barsList = [
+    { key: "PENDING", label: "Чакащи", val: stats.pending, frontBg: "rgba(245, 158, 11, 0.78)", sideBg: "rgba(180, 83, 9, 0.85)", topBg: "rgba(252, 211, 77, 0.9)", glow: "rgba(245, 158, 11, 0.18)", textCol: "text-amber-300" },
+    { key: "IN_PROGRESS", label: "В разработка", val: stats.inProgress, frontBg: "rgba(56, 189, 248, 0.78)", sideBg: "rgba(3, 105, 161, 0.85)", topBg: "rgba(125, 211, 252, 0.9)", glow: "rgba(56, 189, 248, 0.18)", textCol: "text-sky-300" },
+    { key: "COMPLETED", label: "Завършени", val: stats.completed, frontBg: "rgba(16, 185, 129, 0.78)", sideBg: "rgba(4, 120, 87, 0.85)", topBg: "rgba(110, 231, 183, 0.9)", glow: "rgba(16, 185, 129, 0.18)", textCol: "text-emerald-300" },
+  ] ;   
+
+
   // Check auth on load
   useEffect(() => {
     async function checkAuth() {
@@ -428,7 +440,208 @@ export default function AdminPage() {
             >
               Завършени ({stats.completed})
             </button>
+
+            <div className="ml-auto pl-2">
+              <button
+                type="button"
+                onClick={() => setShowGraph( !showGraph )}
+                className="rounded border border-zinc-800 bg-zinc-900 px-2.5 py-1 text-[11px] font-mono text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors whitespace-nowrap"   
+              >
+                {showGraph ? "Скрий 3D графика" : "Покажи 3D графика"}
+              </button>
+            </div>
           </div>
+
+          {/* 3D Isometric Status Graph */}
+          {showGraph && (
+            <div className="border-b border-[#1f1f23] bg-[#0d0e11]/90 px-4 py-3 shrink-0">
+              <div className="max-w-5xl mx-auto rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-3 sm:p-4 shadow-[0_0_20px_rgba(255,255,255,0.02)] flex flex-col md:flex-row items-center justify-between gap-4">
+                
+                {/* Left Info & Interactive Legend */}
+                <div className="w-full md:w-64 space-y-2.5 shrink-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-semibold">
+                      3D Статистика на тикети
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setRotAngl({ x: -18, y: -26 })}
+                      className="text-[10px] font-mono text-zinc-500 hover:text-zinc-300 transition-colors"
+                    >
+                      [Нулирай изглед]
+                    </button>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    {barsList.map((item) => {
+                      const active = statusFilter === item.key ;
+                      return (
+                        <button
+                          key={item.key}
+                          type="button"
+                          onClick={() => setStatusFilter( active ? "ALL" : item.key )}
+                          className={`w-full flex items-center justify-between rounded border px-2.5 py-1.5 text-xs font-mono transition-all ${
+                            active
+                              ? "border-zinc-500 bg-zinc-800/90 text-white"
+                              : "border-zinc-800/80 bg-[#18181c] text-zinc-300 hover:border-zinc-700"
+                          }`}
+                        >
+                          <span className="flex items-center gap-2">
+                            <span
+                              className="h-2.5 w-2.5 rounded-xs"
+                              style={{ background: item.frontBg }}
+                            />
+                            <span>{item.label}</span>
+                          </span>
+                          <span className={`font-bold ${item.textCol}`}>{item.val}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <p className="text-[10px] font-mono text-zinc-500">
+                    Задръж и влачи с мишката за 3D въртене • Кликни стълб за филтър.
+                  </p>
+                </div>
+
+                {/* Right 3D Stage */}
+                <div
+                  onMouseDown={() => setIsDragin( true )}
+                  onMouseUp={() => setIsDragin( false )}
+                  onMouseLeave={() => setIsDragin( false )}
+                  onMouseMove={(e) => {
+                    if( !isDragin ) return ;
+                    setRotAngl((prev) => ({
+                      x: Math.max( -40, Math.min( -5, prev.x - e.movementY * 0.4 ) ),
+                      y: Math.max( -65, Math.min( 65, prev.y + e.movementX * 0.5 ) ),
+                    }));
+                  }}
+                  className="flex-1 w-full h-44 sm:h-48 flex items-center justify-center select-none cursor-grab active:cursor-grabbing overflow-hidden"
+                  style={{ perspective: "900px" }}
+                >
+                  <div
+                    className="relative w-64 h-36 transition-transform duration-75 ease-out"
+                    style={{
+                      transformStyle: "preserve-3d",
+                      transform: `rotateX(${rotAngl.x}deg) rotateY(${rotAngl.y}deg)`,
+                    }}
+                  >
+                    {/* 3D Floor Platform */}
+                    <div
+                      className="absolute left-0 right-0 bottom-0 h-28 border border-zinc-700/70 bg-zinc-900/60"
+                      style={{
+                        transform: "rotateX(90deg) translateZ(-56px)",
+                        backgroundImage:
+                          "linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)",
+                        backgroundSize: "24px 24px",
+                        boxShadow: "0 0 30px rgba(0,0,0,0.6)",
+                      }}
+                    />
+
+                    {/* Back Reference Grid Wall */}
+                    <div
+                      className="absolute inset-x-0 bottom-0 h-28 border-l border-b border-zinc-800/80 pointer-events-none"
+                      style={{
+                        transform: "translateZ(-56px)",
+                        backgroundImage: "linear-gradient(to top, rgba(255,255,255,0.04) 1px, transparent 1px)",
+                        backgroundSize: "100% 28px",
+                      }}
+                    />
+
+                    {/* 3D Columns */}
+                    {barsList.map((bar, indxe) => {
+                      const hPx = Math.max( 10, Math.round( ( bar.val / maxValu ) * 96 ) ) ;
+                      const xPos = 28 + indxe * 82 ;
+                      const wPx = 36 ;
+                      const half = wPx / 2 ;
+
+                      return (
+                        <div
+                          key={bar.key}
+                          onClick={() => setStatusFilter( statusFilter === bar.key ? "ALL" : bar.key )}
+                          className="absolute bottom-0 cursor-pointer group"
+                          style={{
+                            left: `${xPos}px`,
+                            width: `${wPx}px`,
+                            height: `${hPx}px`,
+                            transformStyle: "preserve-3d",
+                            transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+                          }}
+                        >
+                          {/* Floating Value & Label above 3D Bar */}
+                          <div
+                            className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap px-1.5 py-0.5 rounded bg-zinc-900/95 border border-zinc-700/80 text-[11px] font-mono font-bold text-white shadow-sm"
+                            style={{ transform: `translateZ(${half}px)` }}
+                          >
+                            {bar.val}
+                          </div>
+
+                          {/* Front Face */}
+                          <div
+                            className="absolute inset-0 border border-white/15"
+                            style={{
+                              background: bar.frontBg,
+                              transform: `translateZ(${half}px)`,
+                              boxShadow: `0 0 14px ${bar.glow}`,
+                            }}
+                          />
+
+                          {/* Back Face */}
+                          <div
+                            className="absolute inset-0 border border-white/10"
+                            style={{
+                              background: bar.sideBg,
+                              transform: `rotateY(180deg) translateZ(${half}px)`,
+                            }}
+                          />
+
+                          {/* Right Face */}
+                          <div
+                            className="absolute top-0 bottom-0 left-0 border border-white/15"
+                            style={{
+                              width: `${wPx}px`,
+                              background: bar.sideBg,
+                              transform: `rotateY(90deg) translateZ(${half}px)`,
+                            }}
+                          />
+
+                          {/* Left Face */}
+                          <div
+                            className="absolute top-0 bottom-0 left-0 border border-white/10"
+                            style={{
+                              width: `${wPx}px`,
+                              background: bar.sideBg,
+                              transform: `rotateY(-90deg) translateZ(${half}px)`,
+                            }}
+                          />
+
+                          {/* Top Cap Face */}
+                          <div
+                            className="absolute top-0 left-0 border border-white/25"
+                            style={{
+                              width: `${wPx}px`,
+                              height: `${wPx}px`,
+                              background: bar.topBg,
+                              transform: `rotateX(90deg) translateZ(${half}px)`,
+                            }}
+                          />
+
+                          {/* Bottom Label on Platform */}
+                          <div
+                            className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-mono text-zinc-300 font-medium"
+                            style={{ transform: `translateZ(${half + 8}px)` }}
+                          >
+                            {bar.label}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          )}
 
           {/* Search bar */}
           <div className="border-b border-[#1f1f23] bg-[#09090b] px-4 py-2 shrink-0">

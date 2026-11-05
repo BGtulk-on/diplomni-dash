@@ -13,9 +13,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ЛЕСНА ДИПЛОМНА • УКТЦ Правец 2026",
-  description:
-    "Професионална платформа за заявяване, техническо съгласуване и разработка на дипломни работи за випускниците на УКТЦ.",
+  title: "ЛЕСНА ДИПЛОМНА",
+  description: "Изработка на дипломни проекти за УКТЦ.",   
 };
 
 export default function RootLayout({
