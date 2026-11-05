@@ -12,7 +12,6 @@ function generateTicketNumber(): string {
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1";
 
-  // Rate Limiting
   const { allowed } = checkRateLimit(`ticket-sub:${ip}`, 8, 10 * 60 * 1000);
   if (!allowed) {
     return NextResponse.json(
@@ -25,12 +24,10 @@ export async function POST(req: NextRequest) {
     await ensureDbReady();
     const rawData = await req.json();
 
-    // Bot trap check
     if (rawData.website_trap && String(rawData.website_trap).length > 0) {
       return NextResponse.json({ error: "Невалидна заявка (бот филтър)" }, { status: 400 });
     }
 
-    // Zod validation
     const validation = TicketSubmissionSchema.safeParse(rawData);
     if (!validation.success) {
       const firstError = validation.error.issues?.[0]?.message || "Невалидни данни във формата";
@@ -40,10 +37,8 @@ export async function POST(req: NextRequest) {
     const val = validation.data;
     const cleanCourseNumber = val.courseNumber.toLowerCase().trim();
 
-    // Automatically derive email from the 5-symbol code + @uktc-bg.com
     const derivedEmail = `${cleanCourseNumber}@uktc-bg.com`;
 
-    // Generate unique ticket number with collision avoidance
     let ticketNumber = generateTicketNumber();
     let collision = await db.ticket.findUnique({ where: { ticketNumber } });
     let attempts = 0;
@@ -53,7 +48,6 @@ export async function POST(req: NextRequest) {
       attempts++;
     }
 
-    // Anti-XSS Sanitization & Data Insertion
     const newTicket = await db.ticket.create({
       data: {
         ticketNumber,
@@ -77,7 +71,6 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Send confirmation email asynchronously via Resend
     let emailResult = null;
     try {
       emailResult = await sendTicketConfirmationEmail({

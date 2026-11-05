@@ -33,7 +33,6 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: "desc" },
     });
 
-    // In-memory text filter for search query across multiple fields
     const filtered = search
       ? tickets.filter(
           (t) =>
@@ -45,7 +44,6 @@ export async function GET(req: NextRequest) {
         )
       : tickets;
 
-    // Global stats count across all tickets in the database (independent of active filter)
     const allTickets = await db.ticket.findMany({
       select: { status: true },
     });

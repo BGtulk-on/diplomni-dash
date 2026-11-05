@@ -15,11 +15,6 @@ interface EmailResult {
   deliveredTo?: string;
 }
 
-/**
- * Universal helper that handles sending through Resend, automatically falling back
- * to the verified account owner email if Resend's free-tier sandbox prevents sending
- * to unverified recipient domains (e.g. @uktc-bg.com).
- */
 async function sendWithSandboxFallback(options: {
   to: string;
   subject: string;
@@ -47,8 +42,6 @@ async function sendWithSandboxFallback(options: {
     if (res.error) {
       console.warn(`[Resend Warning] Direct send to ${options.to} rejected:`, res.error.message);
 
-      // Check if Resend blocked the send due to unverified recipient in testing mode
-      // Error message format: "You can only send testing emails to your own email address (bgtulk123@gmail.com)..."
       const match = res.error.message?.match(/\(([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\)/);
       const targetFallback = match?.[1] || fallbackEmail;
 
@@ -132,8 +125,6 @@ export async function sendTicketConfirmationEmail(data: {
           <tr>
             <td align="center">
               <div class="card" style="max-width: 480px; width: 100%; text-align: left; background-color: #121215; border: 1px solid #27272a; border-radius: 8px; padding: 24px; box-sizing: border-box;">
-                
-                <!-- Status Header -->
                 <div style="margin-bottom: 16px;">
                   <h1 style="font-size: 16px; font-weight: 600; color: #ffffff; margin: 0 0 4px 0;">
                     Заявката е приета
@@ -143,7 +134,6 @@ export async function sendTicketConfirmationEmail(data: {
                   </p>
                 </div>
 
-                <!-- Ticket Code Box -->
                 <div style="background-color: #18181c; border: 1px solid #3f3f46; border-radius: 6px; padding: 14px; text-align: center; margin: 16px 0;">
                   <div style="font-size: 10px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; text-transform: uppercase; letter-spacing: 0.12em; color: #a1a1aa; margin-bottom: 4px;">
                     Номер на тикет
@@ -153,7 +143,6 @@ export async function sendTicketConfirmationEmail(data: {
                   </div>
                 </div>
 
-                <!-- Details Panel -->
                 <div style="background-color: #18181c; border: 1px solid #27272a; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px;">
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px;">
                     <tr>
@@ -187,7 +176,6 @@ export async function sendTicketConfirmationEmail(data: {
                   </table>
                 </div>
 
-                <!-- Footer -->
                 <div style="border-top: 1px solid #27272a; margin-top: 18px; padding-top: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; color: #71717a; text-align: center;">
                   УКТЦ 2026 • Автоматично съобщение
                 </div>
@@ -248,8 +236,6 @@ export async function sendTicketStatusEmail(data: {
           <tr>
             <td align="center">
               <div class="card" style="max-width: 480px; width: 100%; text-align: left; background-color: #121215; border: 1px solid #27272a; border-radius: 8px; padding: 24px; box-sizing: border-box;">
-                
-                <!-- Status Header -->
                 <div style="margin-bottom: 16px;">
                   <h1 style="font-size: 16px; font-weight: 600; color: #ffffff; margin: 0 0 4px 0;">
                     ${isApproved ? "Заявката е одобрена" : "Статус на заявката"}
@@ -259,12 +245,10 @@ export async function sendTicketStatusEmail(data: {
                   </p>
                 </div>
 
-                <!-- Content Box -->
                 <div style="background-color: #18181c; border: 1px solid #27272a; border-radius: 6px; padding: 16px; margin: 16px 0; font-size: 13px; line-height: 1.5; color: #e4e4e7;">
                   ${data.customMessage ? data.customMessage.replace(/\n/g, "<br />") : defaultBody}
                 </div>
 
-                <!-- Footer -->
                 <div style="border-top: 1px solid #27272a; margin-top: 18px; padding-top: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; color: #71717a; text-align: center;">
                   УКТЦ 2026 • Автоматично съобщение
                 </div>

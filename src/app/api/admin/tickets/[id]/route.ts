@@ -35,7 +35,6 @@ export async function PATCH(
   }
 }
 
-// POST: Trigger email actions (Approve email, Disapprove email, Custom email)
 export async function POST(
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -50,7 +49,7 @@ export async function POST(
   try {
     await ensureDbReady();
     const body = await req.json();
-    const { action, customSubject, customMessage } = body; // action: 'APPROVE_EMAIL' | 'DISAPPROVE_EMAIL' | 'CUSTOM_EMAIL'
+    const { action, customSubject, customMessage } = body;
 
     const ticket = await db.ticket.findUnique({ where: { id } });
     if (!ticket) {
@@ -68,7 +67,6 @@ export async function POST(
       newTicketStatus = "DISAPPROVED";
     }
 
-    // Send email via Resend
     const result = await sendTicketStatusEmail({
       to: ticket.email,
       fullName: ticket.fullName,
@@ -85,7 +83,6 @@ export async function POST(
       );
     }
 
-    // Update ticket status in DB if action was approve/disapprove
     const updatedTicket = await db.ticket.update({
       where: { id },
       data: { status: newTicketStatus },

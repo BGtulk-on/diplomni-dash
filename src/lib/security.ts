@@ -32,13 +32,11 @@ export const TicketSubmissionSchema = z.object({
     .max(100, "Имейл адресът не може да надвишава 100 символа")
     .optional(),
 
-  // 5-box code / course identifier entered by user
   courseNumber: z
     .string()
     .length(5, "Курсовият код трябва да се състои от точно 5 символа")
     .regex(COURSE_REGEX, "Кодът трябва да съдържа 5 цифри или букви"),
 
-  // Nachin za vruzka: Platform & Handle/Info
   commPlatform: z
     .string()
     .min(2, "Въведете платформа за връзка")
@@ -97,13 +95,11 @@ export const TicketSubmissionSchema = z.object({
       message: "Бележките надвишават лимита от 80 думи",
     }),
 
-  // Honeypot field for bot spam detection
   website_trap: z.string().max(0, "Bot detected").optional(),
 });
 
 export type TicketSubmissionData = z.infer<typeof TicketSubmissionSchema>;
 
-// In-memory IP rate limiter for spam prevention
 interface RateLimitRecord {
   count: number;
   resetAt: number;
@@ -114,7 +110,7 @@ const rateLimitStore = new Map<string, RateLimitRecord>();
 export function checkRateLimit(
   ip: string,
   limit = 8,
-  windowMs = 10 * 60 * 1000 // 10 minutes
+  windowMs = 10 * 60 * 1000
 ): { allowed: boolean; remaining: number } {
   const now = Date.now();
   const existing = rateLimitStore.get(ip);

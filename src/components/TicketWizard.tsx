@@ -22,23 +22,10 @@ interface TicketWizardProps {
 }
 
 export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
-  // Total 9 question steps + 1 review + 1 confirmation screen
-  // 1: Name (First name)
-  // 2: 5-symbol code (email is auto-derived as code@uktc-bg.com)
-  // 3: Начин за връзка
-  // 4: Дипломен ръководител
-  // 5: Тема на проекта
-  // 6: Обхват (софтуер / софтуер + документация)
-  // 7: Ниво на сложност
-  // 8: Бюджет
-  // 9: Допълнителна информация
-  // 10: Преглед
-  // 11: Потвърждение
   const [currentStep, setCurrentStep] = useState(1);
   const [direction, setDirection] = useState<1 | -1>(1);
   const totalQuestions = 9;
 
-  // Haptic feedback helper for mobile and touch interactions
   const triggerHaptic = (type: "light" | "selection" | "success" | "error" = "selection") => {
     if (typeof window !== "undefined" && "vibrate" in navigator) {
       try {
@@ -60,7 +47,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
     }
   };
 
-  // Form State
   const [fullName, setFullName] = useState("");
   const [courseCode, setCourseCode] = useState("");
   const [commPlatform, setCommPlatform] = useState("");
@@ -98,7 +84,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
     offeredBudget: number;
   } | null>(null);
 
-  // Single step validator
   const validateCurrentStep = (): boolean => {
     const errs: Record<string, string> = {};
 
@@ -262,7 +247,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
     }
   };
 
-  // Keyboard enter to proceed
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       if (currentStep === 3 && !commHandle.trim()) {
@@ -284,7 +268,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
     }
   };
 
-  // Fluent directional transition variants - clean transform to prevent subpixel ghosting
   const fluentVariants: Variants = {
     initial: ( dir: number ) => ({
       opacity: 0,
@@ -311,7 +294,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
     }),
   };
 
-  // Auto-focus the active input ONLY ONCE when step changes/appears
   useEffect(() => {
     const timer = setTimeout(() => {
       const activeInput = document.querySelector<HTMLInputElement>(
@@ -329,7 +311,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
       onKeyDown={handleKeyDown}
       className="min-h-[100dvh] w-full flex flex-col items-center justify-center p-3 sm:p-4 py-5 bg-[#09090b] text-[#f4f4f5]"
     >
-      {/* Hidden honeypot */}
       <input
         type="text"
         name="website_trap"
@@ -340,16 +321,13 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
         autoComplete="off"
       />
 
-      {/* Brand Header */}
       <div className="text-center mb-4 sm:mb-5 max-w-md">
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase drop-shadow-[0_0_14px_rgba(255,255,255,0.08)]">
           ЛЕСНА ДИПЛОМНА
         </h1>
       </div>
 
-      {/* Main Centered Box with fluid mobile support */}
       <div className="wizard-card w-full max-w-lg rounded-lg border border-zinc-700/80 bg-[#121215]/80 p-5 sm:p-7 shadow-[0_0_24px_rgba(255,255,255,0.03)] flex flex-col justify-between">
-        {/* Sleek animated progress bar */}
         {currentStep <= 10 && (
           <div className="mb-5 space-y-1.5 shrink-0">
             <div className="flex items-center justify-between text-xs font-mono text-zinc-300">
@@ -373,7 +351,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
 
         <div className="flex-1 flex flex-col justify-center">
           <AnimatePresence mode="wait" custom={direction} initial={false}>
-            {/* 1. FIRST NAME */}
             {currentStep === 1 && (
               <motion.div
                 key="step-1"
@@ -408,7 +385,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               </motion.div>
             )}
 
-            {/* 2. COURSE NUMBER (5 BOXES) */}
             {currentStep === 2 && (
               <motion.div
                 key="step-2"
@@ -441,7 +417,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               </motion.div>
             )}
 
-            {/* 3. НАЧИН ЗА ВРЪЗКА */}
             {currentStep === 3 && (
               <motion.div
                 key="step-3"
@@ -492,7 +467,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               </motion.div>
             )}
 
-            {/* 4. SUPERVISOR */}
             {currentStep === 4 && (
               <motion.div
                 key="step-4"
@@ -528,7 +502,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               </motion.div>
             )}
 
-            {/* 5. PROJECT THEME / PRESETS */}
             {currentStep === 5 && (
               <motion.div
                 key="step-5"
@@ -587,8 +560,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                       );
                     })}
                   </div>
-
-                  {/* Premium bottom blur & gradient transition */}
                   <div
                     className={`pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#101013] via-[#101013]/85 to-transparent backdrop-blur-[2px] [mask-image:linear-gradient(to_top,black_35%,transparent_100%)] transition-opacity duration-200 z-10 ${
                       presetAtEnd ? "opacity-0" : "opacity-100"
@@ -624,7 +595,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               </motion.div>
             )}
 
-            {/* 6. SCOPE */}
             {currentStep === 6 && (
               <motion.div
                 key="step-6"
@@ -685,7 +655,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               </motion.div>
             )}
 
-            {/* 7. DIFFICULTY */}
             {currentStep === 7 && (
               <motion.div
                 key="step-7"
@@ -757,7 +726,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                   })}
                 </div>
 
-                {/* Centered Checkbox matching T3 Code design */}
                 <div className="pt-1 flex items-center justify-center">
                   <label
                     className={`w-full flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-md border px-3.5 py-2.5 cursor-pointer select-none transition-all ${
@@ -805,7 +773,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               </motion.div>
             )}
 
-            {/* 8. BUDGET */}
             {currentStep === 8 && (
               <motion.div
                 key="step-8"
@@ -871,7 +838,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               </motion.div>
             )}
 
-            {/* 9. ADDITIONAL INFO / QUESTIONS */}
             {currentStep === 9 && (
               <motion.div
                 key="step-9"
@@ -911,7 +877,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               </motion.div>
             )}
 
-            {/* 10. REVIEW & FINAL CONFIRMATION */}
             {currentStep === 10 && (
               <motion.div
                 key="step-10"
@@ -994,7 +959,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
               </motion.div>
             )}
 
-            {/* 11. TICKET CONFIRMATION SCREEN */}
             {currentStep === 11 && submittedTicket && (
               <motion.div
                 key="step-11"
@@ -1050,7 +1014,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
           </AnimatePresence>
         </div>
 
-        {/* Action Buttons: Embedded directly inside the center card */}
         {currentStep <= 10 && (
           <div className="pt-5 mt-4 border-t border-zinc-700/80 flex items-center justify-between text-xs">
             <button
@@ -1086,7 +1049,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
         )}
       </div>
 
-      {/* Why Choose Us Boxes Below */}
       <div className="w-full max-w-lg sm:max-w-xl mt-4 sm:mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
         <div className="rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-2.5 sm:p-3 text-left shadow-[0_0_14px_rgba(255,255,255,0.02)]">
           <MessageSquare className="h-4 w-4 text-zinc-300" />

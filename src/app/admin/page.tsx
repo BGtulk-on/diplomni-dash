@@ -76,20 +76,16 @@ export default function AdminPage() {
   });
   const [loadingTickets, setLoadingTickets] = useState(false);
 
-  // Filters
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Expanded ticket IDs for detail view
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  // Custom email modal
   const [emailModalTicket, setEmailModalTicket] = useState<Ticket | null>(null);
   const [customSubject, setCustomSubject] = useState("");
   const [customBody, setCustomBody] = useState("");
   const [emailSending, setEmailSending] = useState(false);
 
-  // Notification message
   const [bannerMsg, setBannerMsg] = useState<{ text: string; type: "success" | "error" } | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -107,7 +103,6 @@ export default function AdminPage() {
   ] ;   
 
 
-  // Check auth on load
   useEffect(() => {
     async function checkAuth() {
       try {
@@ -164,9 +159,7 @@ export default function AdminPage() {
       await fetch("/api/admin/logout", { method: "POST" });
       setIsAuthenticated(false);
       setTickets([]);
-    } catch {
-      // Ignored
-    }
+    } catch {}
   };
 
   const fetchTickets = async () => {
@@ -309,7 +302,6 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-[100dvh] md:h-[100dvh] w-screen overflow-x-hidden md:overflow-hidden flex flex-col bg-[#09090b] text-[#f4f4f5]">
-      {/* Top Bar */}
       <div className="h-10 border-b border-[#1f1f23] bg-[#0d0e11] px-4 flex items-center justify-between text-xs font-mono shrink-0">
         <div className="flex items-center gap-3">
           <Link href="/" className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-zinc-100 transition-colors">
@@ -340,7 +332,6 @@ export default function AdminPage() {
         )}
       </div>
 
-      {/* Banner */}
       {bannerMsg && (
         <div
           className={`fixed top-12 right-4 z-50 rounded border px-3 py-1.5 text-xs font-mono shadow-lg ${
@@ -353,7 +344,6 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* LOGIN VIEW */}
       {!isAuthenticated ? (
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="w-full max-w-sm rounded-md border border-zinc-800 bg-[#141417] p-5 space-y-4">
@@ -390,9 +380,7 @@ export default function AdminPage() {
           </div>
         </div>
       ) : (
-        /* AUTHENTICATED T3 VIEW */
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-          {/* Metrics bar */}
           <div className="border-b border-[#1f1f23] bg-[#0d0e11] px-4 py-2 flex items-center gap-3 text-xs font-mono shrink-0 overflow-x-auto">
             <button
               onClick={() => setStatusFilter("ALL")}
@@ -454,12 +442,9 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* 3D Isometric Status Graph */}
           {showGraph && (
             <div className="border-b border-[#1f1f23] bg-[#0d0e11]/90 px-4 py-3 shrink-0">
               <div className="max-w-5xl mx-auto rounded-lg border border-zinc-800/90 bg-[#121215]/80 p-3 sm:p-4 shadow-[0_0_20px_rgba(255,255,255,0.02)] flex flex-col md:flex-row items-center justify-between gap-4">
-                
-                {/* Left Info & Interactive Legend */}
                 <div className="w-full md:w-64 space-y-2.5 shrink-0">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-semibold">
@@ -502,7 +487,6 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Right 3D Stage */}
                 <div
                   onMouseDown={() => setIsDragin( true )}
                   onMouseUp={() => setIsDragin( false )}
@@ -540,7 +524,6 @@ export default function AdminPage() {
                       transform: `rotateX(${rotAngl.x}deg) rotateY(${rotAngl.y}deg)`,
                     }}
                   >
-                    {/* 3D Floor Platform */}
                     <div
                       className="absolute left-0 right-0 bottom-0 h-28 border border-zinc-700/70 bg-zinc-900/60"
                       style={{
@@ -552,7 +535,6 @@ export default function AdminPage() {
                       }}
                     />
 
-                    {/* Back Reference Grid Wall */}
                     <div
                       className="absolute inset-x-0 bottom-0 h-28 border-l border-b border-zinc-800/80 pointer-events-none"
                       style={{
@@ -562,7 +544,6 @@ export default function AdminPage() {
                       }}
                     />
 
-                    {/* 3D Columns */}
                     {barsList.map((bar, indxe) => {
                       const hPx = Math.max( 10, Math.round( ( bar.val / maxValu ) * 96 ) ) ;
                       const xPos = 28 + indxe * 82 ;
@@ -582,7 +563,6 @@ export default function AdminPage() {
                             transition: "height 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
                           }}
                         >
-                          {/* Floating Value & Label above 3D Bar */}
                           <div
                             className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap px-1.5 py-0.5 rounded bg-zinc-900/95 border border-zinc-700/80 text-[11px] font-mono font-bold text-white shadow-sm"
                             style={{ transform: `translateZ(${half}px)` }}
@@ -590,7 +570,6 @@ export default function AdminPage() {
                             {bar.val}
                           </div>
 
-                          {/* Front Face */}
                           <div
                             className="absolute inset-0 border border-white/15"
                             style={{
@@ -600,7 +579,6 @@ export default function AdminPage() {
                             }}
                           />
 
-                          {/* Back Face */}
                           <div
                             className="absolute inset-0 border border-white/10"
                             style={{
@@ -609,7 +587,6 @@ export default function AdminPage() {
                             }}
                           />
 
-                          {/* Right Face */}
                           <div
                             className="absolute top-0 bottom-0 left-0 border border-white/15"
                             style={{
@@ -619,7 +596,6 @@ export default function AdminPage() {
                             }}
                           />
 
-                          {/* Left Face */}
                           <div
                             className="absolute top-0 bottom-0 left-0 border border-white/10"
                             style={{
@@ -629,7 +605,6 @@ export default function AdminPage() {
                             }}
                           />
 
-                          {/* Top Cap Face */}
                           <div
                             className="absolute top-0 left-0 border border-white/25"
                             style={{
@@ -640,7 +615,6 @@ export default function AdminPage() {
                             }}
                           />
 
-                          {/* Bottom Label on Platform */}
                           <div
                             className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] font-mono text-zinc-300 font-medium"
                             style={{ transform: `translateZ(${half + 8}px)` }}
@@ -657,7 +631,6 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Search bar */}
           <div className="border-b border-[#1f1f23] bg-[#09090b] px-4 py-2 shrink-0">
             <div className="relative max-w-5xl mx-auto">
               <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-zinc-500" />
@@ -671,7 +644,6 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Scrollable ticket list table */}
           <div className="flex-1 overflow-y-auto p-4">
             <div className="max-w-5xl mx-auto space-y-2">
             {tickets.length === 0 ? (
@@ -743,7 +715,6 @@ export default function AdminPage() {
                           </div>
                         )}
 
-                        {/* Internal admin notes */}
                         <div className="flex gap-2">
                           <input
                             type="text"
@@ -763,7 +734,6 @@ export default function AdminPage() {
                           </button>
                         </div>
 
-                        {/* 1-click Resend Actions */}
                         <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
                           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                             <button
@@ -808,7 +778,6 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* Custom Email Modal */}
       {emailModalTicket && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
           <div className="w-full max-w-md rounded border border-zinc-800 bg-[#141417] p-4 space-y-3">

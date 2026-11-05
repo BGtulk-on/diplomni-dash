@@ -40,7 +40,6 @@
     scrollbar-color: #3f3f46 #09090b;
   }
 
-  /* Micro hairline scrollbars only for body and explicit scroll containers */
   body::-webkit-scrollbar,
   .overflow-y-auto::-webkit-scrollbar {
     width: 5px;
@@ -60,7 +59,6 @@
     background: #52525b;
   }
 
-  /* Hide number input spinners / arrows */
   input[type="number"]::-webkit-outer-spin-button,
   input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;

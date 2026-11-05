@@ -11,10 +11,8 @@ interface FiveBoxInputProps {
 export function FiveBoxInput({ value, onChange, error }: FiveBoxInputProps) {
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Array of 5 chars
   const chars = Array.from({ length: 5 }, (_, i) => value[i] || "");
 
-  // Auto-focus and select first box when component appears
   useEffect(() => {
     requestAnimationFrame(() => {
       const firstEmpty = chars.findIndex((c) => !c);
@@ -35,7 +33,6 @@ export function FiveBoxInput({ value, onChange, error }: FiveBoxInputProps) {
   const handleCharChange = (index: number, charVal: string) => {
     const cleaned = charVal.replace(/[^0-9]/g, "") ;   
     if (!cleaned) {
-      // Backspaced or cleared
       const nextChars = [...chars];
       nextChars[index] = "";
       onChange(nextChars.join("").trimEnd());
@@ -44,19 +41,16 @@ export function FiveBoxInput({ value, onChange, error }: FiveBoxInputProps) {
 
     triggerHaptic();
 
-    // Handle single char or paste
     if (cleaned.length === 1) {
       const nextChars = [...chars];
       nextChars[index] = cleaned;
       const combined = nextChars.join("");
       onChange(combined);
 
-      // Auto-focus next input
       if (index < 4) {
         inputsRef.current[index + 1]?.focus();
       }
     } else if (cleaned.length > 1) {
-      // Pasted multi-character code
       const pasted = cleaned.slice(0, 5);
       onChange(pasted);
       const nextFocus = Math.min(pasted.length, 4);
