@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { db, ensureDbReady } from "@/lib/db";
 import { TicketSubmissionSchema, checkRateLimit, sanitizeText } from "@/lib/security";
 import { sendTicketConfirmationEmail } from "@/lib/email";
 import crypto from "node:crypto";
@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    await ensureDbReady();
     const rawData = await req.json();
 
     // Bot trap check
@@ -124,6 +125,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    await ensureDbReady();
     const ticket = await db.ticket.findUnique({
       where: { ticketNumber },
       select: {

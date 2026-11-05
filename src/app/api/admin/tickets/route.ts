@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { db, ensureDbReady } from "@/lib/db";
 import { verifyAdminAuth } from "@/lib/adminAuth";
 
 export async function GET(req: NextRequest) {
@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
   const search = searchParams.get("search")?.trim().toLowerCase();
 
   try {
+    await ensureDbReady();
     const whereClause: Record<string, unknown> = {};
 
     if (status && status !== "ALL") {

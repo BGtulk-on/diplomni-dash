@@ -33,7 +33,7 @@ export function FiveBoxInput({ value, onChange, error }: FiveBoxInputProps) {
   };
 
   const handleCharChange = (index: number, charVal: string) => {
-    const cleaned = charVal.toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const cleaned = charVal.replace(/[^0-9]/g, "") ;   
     if (!cleaned) {
       // Backspaced or cleared
       const nextChars = [...chars];
@@ -76,7 +76,7 @@ export function FiveBoxInput({ value, onChange, error }: FiveBoxInputProps) {
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const pastedText = e.clipboardData.getData("text").toUpperCase().replace(/[^A-Z0-9]/g, "");
+    const pastedText = e.clipboardData.getData("text").replace(/[^0-9]/g, "") ;   
     if (pastedText) {
       const trimmed = pastedText.slice(0, 5);
       onChange(trimmed);
@@ -95,6 +95,8 @@ export function FiveBoxInput({ value, onChange, error }: FiveBoxInputProps) {
               inputsRef.current[i] = el;
             }}
             type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             maxLength={1}
             value={chars[i] || ""}
             onChange={(e) => handleCharChange(i, e.target.value)}

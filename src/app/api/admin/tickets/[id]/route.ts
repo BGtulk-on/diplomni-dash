@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { db, ensureDbReady } from "@/lib/db";
 import { verifyAdminAuth } from "@/lib/adminAuth";
 import { sendTicketStatusEmail } from "@/lib/email";
 
@@ -15,6 +15,7 @@ export async function PATCH(
   const { id } = await context.params;
 
   try {
+    await ensureDbReady();
     const body = await req.json();
     const { status, adminNotes } = body;
 
@@ -47,6 +48,7 @@ export async function POST(
   const { id } = await context.params;
 
   try {
+    await ensureDbReady();
     const body = await req.json();
     const { action, customSubject, customMessage } = body; // action: 'APPROVE_EMAIL' | 'DISAPPROVE_EMAIL' | 'CUSTOM_EMAIL'
 
@@ -124,6 +126,7 @@ export async function DELETE(
   const { id } = await context.params;
 
   try {
+    await ensureDbReady();
     await db.ticket.delete({ where: { id } });
     return NextResponse.json({ success: true, message: "Заявката бе изтрита" });
   } catch (error) {
