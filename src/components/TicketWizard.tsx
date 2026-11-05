@@ -22,7 +22,7 @@ interface TicketWizardProps {
 }
 
 export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState( 0 );   
   const [direction, setDirection] = useState<1 | -1>(1);
   const totalQuestions = 9;
 
@@ -156,7 +156,15 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
     triggerHaptic("selection");
     setDirection(-1);
     setErrors({});
-    setCurrentStep((prev) => Math.max(prev - 1, 1));
+    setCurrentStep((prev) => Math.max(prev- 1, 0));   
+  };
+
+  const start_quiz = () => {
+    triggerHaptic("light") ;
+    setDirection( 1 ) ;   
+    setCurrentStep( 1 ) ;
+
+
   };
 
   const handleSelectPreset = (presetId: string) => {
@@ -249,6 +257,12 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
+      if( currentStep === 0 ){
+        e.preventDefault() ;
+        start_quiz() ;   
+        return ;
+      }
+
       if (currentStep === 3 && !commHandle.trim()) {
         const activeEl = document.activeElement as HTMLElement | null;
         if (activeEl?.getAttribute("placeholder")?.includes("Платформа")) {
@@ -321,14 +335,14 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
         autoComplete="off"
       />
 
-      <div className="text-center mb-4 sm:mb-5 max-w-md">
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white uppercase drop-shadow-[0_0_14px_rgba(255,255,255,0.08)]">
+      <div className="text-center mb-4 sm:mb-5 max-w-lg">
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white uppercase drop-shadow-[0_0_14px_rgba(255,255,255,0.08)]">   
           ЛЕСНА ДИПЛОМНА
         </h1>
       </div>
 
       <div className="wizard-card w-full max-w-lg rounded-lg border border-zinc-700/80 bg-[#121215]/80 p-5 sm:p-7 shadow-[0_0_24px_rgba(255,255,255,0.03)] flex flex-col justify-between">
-        {currentStep <= 10 && (
+        {currentStep >= 1 && currentStep <= 10 && (
           <div className="mb-5 space-y-1.5 shrink-0">
             <div className="flex items-center justify-between text-xs font-mono text-zinc-300">
               <span className="uppercase tracking-wider text-zinc-400 font-medium">
@@ -351,6 +365,43 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
 
         <div className="flex-1 flex flex-col justify-center">
           <AnimatePresence mode="wait" custom={direction} initial={false}>
+            {currentStep === 0 && (
+              <motion.div
+                key="step-0"
+                custom={direction}
+                variants={fluentVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                className="space-y-5 py-1"
+              >
+                <div className="space-y-3">
+                  <h2 className="text-base sm:text-lg font-semibold text-white tracking-tight leading-snug">
+                    Не ти се занимава, нямаш времето или способностите да направиш дипломната си работа?
+                  </h2>
+                  <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                    Няма проблеми! За разумна цена ние ще я направим за теб както <span className="text-white font-bold">ТИ</span> я искаш.
+                  </p>
+                </div>
+
+
+                <div className="pt-1">
+                  <button
+                    type="button"
+                    onClick={start_quiz}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-5 py-2.5 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 transition-all shadow-[0_0_12px_rgba(255,255,255,0.12)]"   
+                  >
+                    <span>Спести стрес сега</span>
+                    <span className="font-mono">-&gt;</span>
+
+
+                  </button>
+                </div>
+
+
+              </motion.div>
+            )}
+
             {currentStep === 1 && (
               <motion.div
                 key="step-1"
@@ -1014,12 +1065,12 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
           </AnimatePresence>
         </div>
 
-        {currentStep <= 10 && (
+        {currentStep >= 1 && currentStep <= 10 && (
           <div className="pt-5 mt-4 border-t border-zinc-700/80 flex items-center justify-between text-xs">
             <button
               type="button"
               onClick={handlePrev}
-              disabled={currentStep === 1 || isSubmitting}
+              disabled={isSubmitting}
               className="inline-flex items-center gap-1 text-zinc-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none transition-colors py-2 px-3.5 rounded-md border border-zinc-700 hover:bg-zinc-800 font-medium"
             >
               <ChevronLeft className="h-4 w-4" />
