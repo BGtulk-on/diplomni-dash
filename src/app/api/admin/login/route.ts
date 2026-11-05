@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateAdminToken, ADMIN_COOKIE_NAME } from "@/lib/adminAuth";
-import { checkRateLimit } from "@/lib/security";
+import { checkRateLimit, getClientIp } from "@/lib/security";
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for") || "127.0.0.1";
+  const ip = getClientIp( req.headers ) ;   
   const { allowed } = checkRateLimit(`admin-login:${ip}`, 5, 15 * 60 * 1000);
 
   if (!allowed) {

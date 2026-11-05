@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db, ensureDbReady } from "@/lib/db";
 import { verifyAdminAuth } from "@/lib/adminAuth";
 import { sendTicketStatusEmail } from "@/lib/email";
+import { AdminTicketPatchSchema, AdminEmailActionSchema, sanitizeText } from "@/lib/security";
 
 export async function PATCH(
   req: NextRequest,
@@ -16,12 +17,20 @@ export async function PATCH(
 
   try {
     await ensureDbReady();
-    const body = await req.json();
-    const { status, adminNotes } = body;
+    const rawBody = await req.json();
+    const parsed = AdminTicketPatchSchema.safeParse( rawBody ) ;   
+    if( !parsed.success ){
+      return NextResponse.json({ error: "Невалидни данни за обновяване" }, { status: 400 }) ;
+    }
+
+    const { status, adminNotes } = parsed.data ;
+
 
     const dataToUpdate: Record<string, unknown> = {};
     if (status !== undefined) dataToUpdate.status = status;
-    if (adminNotes !== undefined) dataToUpdate.adminNotes = adminNotes;
+    if (adminNotes !== undefined) {
+      dataToUpdate.adminNotes = adminNotes ? sanitizeText( adminNotes ) : null ;   
+    }
 
     const updated = await db.ticket.update({
       where: { id },
@@ -48,8 +57,13 @@ export async function POST(
 
   try {
     await ensureDbReady();
-    const body = await req.json();
-    const { action, customSubject, customMessage } = body;
+    const rawBody = await req.json();
+    const parsed = AdminEmailActionSchema.safeParse( rawBody ) ;
+    if( !parsed.success ){
+      return NextResponse.json({ error: "Невалидни параметри за имейл" }, { status: 400 }) ;   
+    }
+
+    const { action, customSubject, customMessage } = parsed.data ;
 
     const ticket = await db.ticket.findUnique({ where: { id } });
     if (!ticket) {

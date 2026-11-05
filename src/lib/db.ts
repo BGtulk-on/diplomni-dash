@@ -8,11 +8,16 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function resolveDbUrl(): string {
-  const raw = ( process.env.DATABASE_URL || "" ).replace(/^["']|["']$/g, "").trim() ;   
-  if (raw.startsWith("libsql://") || raw.startsWith("https://") || raw.startsWith("http://")) {
+  const raw = ( process.env.DATABASE_URL || process.env.TURSO_DATABASE_URL || "" ).replace(/^["']|["']$/g, "").trim() ;   
+  if (raw.startsWith("libsql://") || raw.startsWith("https://") || raw.startsWith("http://") || raw.startsWith("file:")) {
+    if( process.env.VERCEL && raw.startsWith("file:") ){
+      console.warn("[DB Warning] Local file SQLite URL used on Vercel; storage in /tmp is ephemeral! Configure a remote libsql:// Turso URL.") ;   
+      return "file:/tmp/dev.db" ;
+    }
     return raw;
   }
   if (process.env.VERCEL) {
+    console.warn("[DB Warning] No remote DATABASE_URL found on Vercel! Falling back to ephemeral /tmp/dev.db.") ;   
     return "file:/tmp/dev.db";
   }
   return `file:${path.resolve(process.cwd(), "dev.db")}`;

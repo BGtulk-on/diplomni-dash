@@ -1,8 +1,9 @@
 import { Resend } from "resend";
+import { escapeHtml } from "@/lib/security";
 
 const resendApiKey = process.env.RESEND_API_KEY;
 const resendFrom = process.env.RESEND_FROM_EMAIL || "Дипломни УКТЦ <onboarding@resend.dev>";
-const fallbackEmail = process.env.RESEND_TEST_FALLBACK_EMAIL || "bgtulk123@gmail.com";
+const fallbackEmail = ( process.env.RESEND_TEST_FALLBACK_EMAIL || "" ).trim() ;   
 
 const resendClient = resendApiKey && resendApiKey !== "re_placeholder" ? new Resend(resendApiKey) : null;
 
@@ -112,13 +113,19 @@ export async function sendTicketConfirmationEmail(data: {
     FULL_PACKAGE: "Софтуер + Документация",
   };
 
+  const safeName = escapeHtml( data.fullName ) ;
+  const safeTicket = escapeHtml( data.ticketNumber ) ;   
+  const safeCourse = escapeHtml( data.courseNumber ) ;
+  const safeIdea = escapeHtml( data.ideaTitle ) ;
+
+
   const html = `
     <!DOCTYPE html>
     <html lang="bg">
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Заявка ${data.ticketNumber}</title>
+        <title>Заявка ${safeTicket}</title>
       </head>
       <body style="margin: 0; padding: 24px 12px; background-color: #09090b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f4f4f5;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -130,7 +137,7 @@ export async function sendTicketConfirmationEmail(data: {
                     Заявката е приета
                   </h1>
                   <p style="font-size: 13px; color: #d4d4d8; margin: 0; line-height: 1.4;">
-                    Здравейте, ${data.fullName}. Ще получите имейл при одобрение.
+                    Здравейте, ${safeName}. Ще получите имейл при одобрение.
                   </p>
                 </div>
 
@@ -139,7 +146,7 @@ export async function sendTicketConfirmationEmail(data: {
                     Номер на тикет
                   </div>
                   <div style="font-size: 24px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-weight: 700; color: #ffffff; letter-spacing: 0.08em;">
-                    ${data.ticketNumber}
+                    ${safeTicket}
                   </div>
                 </div>
 
@@ -147,15 +154,15 @@ export async function sendTicketConfirmationEmail(data: {
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px;">
                     <tr>
                       <td style="padding: 4px 0; color: #a1a1aa; font-size: 11px; width: 36%;">Име:</td>
-                      <td style="padding: 4px 0; color: #ffffff; font-weight: 500;">${data.fullName}</td>
+                      <td style="padding: 4px 0; color: #ffffff; font-weight: 500;">${safeName}</td>
                     </tr>
                     <tr>
                       <td style="padding: 4px 0; color: #a1a1aa; font-size: 11px;">Курсов код:</td>
-                      <td style="padding: 4px 0; color: #ffffff; font-weight: 700;">${data.courseNumber}</td>
+                      <td style="padding: 4px 0; color: #ffffff; font-weight: 700;">${safeCourse}</td>
                     </tr>
                     <tr>
                       <td style="padding: 4px 0; color: #a1a1aa; font-size: 11px;">Тема:</td>
-                      <td style="padding: 4px 0; color: #ffffff; font-weight: 500;">${data.ideaTitle}</td>
+                      <td style="padding: 4px 0; color: #ffffff; font-weight: 500;">${safeIdea}</td>
                     </tr>
                     <tr>
                       <td style="padding: 4px 0; color: #a1a1aa; font-size: 11px;">Сложност:</td>
@@ -223,13 +230,19 @@ export async function sendTicketStatusEmail(data: {
     : `За съжаление не можем да поемем проекта за посочения период.<br /><br />
        Пожелаваме ви успех с дипломирането.`;
 
+  const safeSubj = escapeHtml( data.subject || defaultSubject ) ;
+  const safeName = escapeHtml( data.fullName ) ;   
+  const safeTicket = escapeHtml( data.ticketNumber ) ;
+  const safeCustomBody = data.customMessage ? escapeHtml( data.customMessage ).replace(/\n/g, "<br />") : defaultBody ;   
+
+
   const html = `
     <!DOCTYPE html>
     <html lang="bg">
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>${data.subject || defaultSubject}</title>
+        <title>${safeSubj}</title>
       </head>
       <body style="margin: 0; padding: 24px 12px; background-color: #09090b; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f4f4f5;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -241,12 +254,12 @@ export async function sendTicketStatusEmail(data: {
                     ${isApproved ? "Заявката е одобрена" : "Статус на заявката"}
                   </h1>
                   <p style="font-size: 13px; color: #d4d4d8; margin: 0; line-height: 1.4;">
-                    Здравейте, ${data.fullName}. Тикет: <strong style="color: #ffffff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">${data.ticketNumber}</strong>
+                    Здравейте, ${safeName}. Тикет: <strong style="color: #ffffff; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">${safeTicket}</strong>
                   </p>
                 </div>
 
                 <div style="background-color: #18181c; border: 1px solid #27272a; border-radius: 6px; padding: 16px; margin: 16px 0; font-size: 13px; line-height: 1.5; color: #e4e4e7;">
-                  ${data.customMessage ? data.customMessage.replace(/\n/g, "<br />") : defaultBody}
+                  ${safeCustomBody}
                 </div>
 
                 <div style="border-top: 1px solid #27272a; margin-top: 18px; padding-top: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 10px; color: #71717a; text-align: center;">

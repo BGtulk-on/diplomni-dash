@@ -28,33 +28,44 @@ export async function GET(req: NextRequest) {
       whereClause.courseNumber = course;
     }
 
-    const tickets = await db.ticket.findMany({
-      where: whereClause,
-      orderBy: { createdAt: "desc" },
-    });
+    if( search ){
+      whereClause.OR = [
+        { ticketNumber: { contains: search } },
+        { fullName: { contains: search } },
+        { email: { contains: search } },
+        { ideaTitle: { contains: search } },
+        { supervisor: { contains: search } },
+      ] ;   
+    }
 
-    const filtered = search
-      ? tickets.filter(
-          (t) =>
-            t.ticketNumber.toLowerCase().includes(search) ||
-            t.fullName.toLowerCase().includes(search) ||
-            t.email.toLowerCase().includes(search) ||
-            t.ideaTitle.toLowerCase().includes(search) ||
-            t.supervisor.toLowerCase().includes(search)
-        )
-      : tickets;
 
-    const allTickets = await db.ticket.findMany({
-      select: { status: true },
-    });
+    const [filtered, groupedStats] = await Promise.all([
+      db.ticket.findMany({
+        where: whereClause,
+        orderBy: { createdAt: "desc" },
+      }),
+      db.ticket.groupBy({
+        by: ["status"],
+        _count: { _all: true },
+      }),
+    ]) ;   
+
+    const countMap: Record<string, number> = {} ;
+    let tot_cnt = 0 ;
+    for( const grp of groupedStats ){
+      const c_val = grp._count._all ;
+      countMap[ grp.status ] = c_val ;   
+      tot_cnt = tot_cnt+ c_val ;
+    }
+
 
     const stats = {
-      total: allTickets.length,
-      pending: allTickets.filter((t) => t.status === "PENDING").length,
-      approved: allTickets.filter((t) => t.status === "APPROVED").length,
-      disapproved: allTickets.filter((t) => t.status === "DISAPPROVED").length,
-      inProgress: allTickets.filter((t) => t.status === "IN_PROGRESS").length,
-      completed: allTickets.filter((t) => t.status === "COMPLETED").length,
+      total: tot_cnt,
+      pending: countMap["PENDING"] || 0,
+      approved: countMap["APPROVED"] || 0,
+      disapproved: countMap["DISAPPROVED"] || 0,
+      inProgress: countMap["IN_PROGRESS"] || 0,
+      completed: countMap["COMPLETED"] || 0,
     };
 
     return NextResponse.json({ success: true, tickets: filtered, stats });

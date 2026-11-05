@@ -1,16 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db, ensureDbReady } from "@/lib/db";
-import { TicketSubmissionSchema, checkRateLimit, sanitizeText } from "@/lib/security";
+import { TicketSubmissionSchema, checkRateLimit, sanitizeText, getClientIp } from "@/lib/security";
 import { sendTicketConfirmationEmail } from "@/lib/email";
 import crypto from "node:crypto";
 
+const CHAR_POOL = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ" ;   
+
 function generateTicketNumber(): string {
-  const randomSuffix = crypto.randomInt(1000, 9999).toString();
-  return `UKTC-2026-${randomSuffix}`;
+  let code_str = "" ;
+  const pool_lenght = CHAR_POOL.length ;   
+  for( let indxe = 0; indxe < 6; indxe++ ){
+    code_str += CHAR_POOL[ crypto.randomInt( 0, pool_lenght ) ] ;
+  }
+
+
+  return `UKTC-2026-${code_str}`;
 }
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "127.0.0.1";
+  const ip = getClientIp( req.headers ) ;   
 
   const { allowed } = checkRateLimit(`ticket-sub:${ip}`, 8, 10 * 60 * 1000);
   if (!allowed) {
@@ -42,10 +50,14 @@ export async function POST(req: NextRequest) {
     let ticketNumber = generateTicketNumber();
     let collision = await db.ticket.findUnique({ where: { ticketNumber } });
     let attempts = 0;
-    while (collision && attempts < 5) {
+    while (collision && attempts < 8) {
       ticketNumber = generateTicketNumber();
       collision = await db.ticket.findUnique({ where: { ticketNumber } });
       attempts++;
+    }
+
+    if( collision ){
+      return NextResponse.json({ error: "Неуспешно генериране на уникален номер. Опитайте отново." }, { status: 503 }) ;   
     }
 
     const newTicket = await db.ticket.create({
@@ -110,11 +122,21 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const ticketNumber = searchParams.get("ticketNumber")?.trim();
+  const ip = getClientIp( req.headers ) ;
+  const { allowed } = checkRateLimit( `ticket-lookup:${ip}`, 15, 5 * 60 * 1000 ) ;   
+  if( !allowed ){
+    return NextResponse.json(
+      { error: "Твърде много проверки. Опитайте след няколко минути." },
+      { status: 429 }
+    );
+  }
 
-  if (!ticketNumber) {
-    return NextResponse.json({ error: "Моля, въведете номер на тикет" }, { status: 400 });
+
+  const { searchParams } = new URL(req.url);
+  const ticketNumber = searchParams.get("ticketNumber")?.trim().toUpperCase();   
+
+  if (!ticketNumber || ticketNumber.length > 30) {
+    return NextResponse.json({ error: "Моля, въведете валиден номер на тикет" }, { status: 400 });
   }
 
   try {

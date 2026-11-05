@@ -1,11 +1,14 @@
 import { z } from "zod";
 
 export const NAME_REGEX = /^[a-zA-Zа-яА-ЯёЁ\s\-\.]{2,40}$/u;
-export const COURSE_REGEX = /^[0-9a-zA-Z]{5}$/;
+export const COURSE_REGEX = /^[0-9]{5}$/;   
+export const VALID_STATUSES = ["PENDING", "APPROVED", "DISAPPROVED", "IN_PROGRESS", "COMPLETED"] as const ;
+
 
 export function countWords(str: string): number {
   if (!str) return 0;
-  return str.trim().split(/\s+/).filter(Boolean).length;
+  const w_list = str.trim().split(/\s+/).filter(Boolean) ;   
+  return w_list.length;
 }
 
 export function sanitizeText(input: string): string {
@@ -14,6 +17,19 @@ export function sanitizeText(input: string): string {
     .replace(/<[^>]*>?/gm, "")
     .replace(/[<>'"]/g, "")
     .trim();
+}
+
+
+export function escapeHtml( str_in: string ): string {
+  if( !str_in ) return "" ;   
+  return str_in
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;") ;   
+
+
 }
 
 export const TicketSubmissionSchema = z.object({
@@ -34,8 +50,8 @@ export const TicketSubmissionSchema = z.object({
 
   courseNumber: z
     .string()
-    .length(5, "Курсовият код трябва да се състои от точно 5 символа")
-    .regex(COURSE_REGEX, "Кодът трябва да съдържа 5 цифри или букви"),
+    .length(5, "Курсовият код трябва да се състои от точно 5 цифри")
+    .regex(COURSE_REGEX, "Кодът трябва да съдържа точно 5 цифри"),
 
   commPlatform: z
     .string()
@@ -84,7 +100,7 @@ export const TicketSubmissionSchema = z.object({
     .number()
     .int("Бюджетът трябва да бъде цяло число")
     .min(150, "Минималният предложен бюджет е 150 €")
-    .max(5000, "Предложеният бюджет надвишава максимално допустимия лимит"),
+    .max(600, "Максималният предложен бюджет е 600 €"),   
 
   additionalNotes: z
     .string()
@@ -100,6 +116,34 @@ export const TicketSubmissionSchema = z.object({
 
 export type TicketSubmissionData = z.infer<typeof TicketSubmissionSchema>;
 
+export const AdminTicketPatchSchema = z.object({
+  status: z.enum( VALID_STATUSES ).optional(),
+  adminNotes: z.string().max( 1000, "Бележките са твърде дълги" ).optional().nullable(),   
+});
+
+
+export const AdminEmailActionSchema = z.object({
+  action: z.enum(["APPROVE_EMAIL", "DISAPPROVE_EMAIL", "CUSTOM_EMAIL"]),
+  customSubject: z.string().max( 150 ).optional(),
+  customMessage: z.string().max( 3000 ).optional(),
+});   
+
+
+
+export function getClientIp( reqHeaders: Headers ): string {
+  const real_ip = reqHeaders.get("x-real-ip")?.trim() ;   
+  if( real_ip ) return real_ip ;
+
+  const fwd = reqHeaders.get("x-forwarded-for") ;
+  if( fwd ){
+    const first_ip = fwd.split(",")[0]?.trim() ;   
+    if( first_ip ) return first_ip ;
+  }
+
+
+  return "127.0.0.1" ;
+}
+
 interface RateLimitRecord {
   count: number;
   resetAt: number;
@@ -113,10 +157,18 @@ export function checkRateLimit(
   windowMs = 10 * 60 * 1000
 ): { allowed: boolean; remaining: number } {
   const now = Date.now();
+
+  if( rateLimitStore.size > 500 ){
+    for( const [k, v_rec] of rateLimitStore.entries() ){
+      if( now > v_rec.resetAt ) rateLimitStore.delete( k ) ;   
+    }
+
+  }
+
   const existing = rateLimitStore.get(ip);
 
   if (!existing || now > existing.resetAt) {
-    rateLimitStore.set(ip, { count: 1, resetAt: now + windowMs });
+    rateLimitStore.set(ip, { count: 1, resetAt: now+ windowMs });   
     return { allowed: true, remaining: limit - 1 };
   }
 
@@ -127,3 +179,6 @@ export function checkRateLimit(
   existing.count += 1;
   return { allowed: true, remaining: limit - existing.count };
 }
+
+
+

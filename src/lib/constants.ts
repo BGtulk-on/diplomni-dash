@@ -66,7 +66,7 @@ export const PROJECT_DIFFICULTIES = [
     targetGrade: "лесна 5ца",
     tagline: "CRUD функции",
     description: "База данни, форми и вход в системата.",
-    recommendedBudget: "350 - 550 лв.",
+    recommendedBudget: "150 - 250 €",   
   },
   {
     id: "STANDARD",
@@ -74,7 +74,7 @@ export const PROJECT_DIFFICULTIES = [
     targetGrade: "лесна 6ца",
     tagline: "Пълен софтуер",
     description: "Интерактивен дизайн, роли и API.",
-    recommendedBudget: "550 - 900 лв.",
+    recommendedBudget: "250 - 450 €",
   },
   {
     id: "ADVANCED",
@@ -82,6 +82,6 @@ export const PROJECT_DIFFICULTIES = [
     targetGrade: "за любители",
     tagline: "Комплексен проект",
     description: "Реално време и микроуслуги.",
-    recommendedBudget: "900 - 1500+ лв.",
+    recommendedBudget: "450 - 600 €",   
   },
 ] as const;
