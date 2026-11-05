@@ -133,16 +133,6 @@ export async function sendTicketConfirmationEmail(data: {
             <td align="center">
               <div class="card" style="max-width: 480px; width: 100%; text-align: left; background-color: #121215; border: 1px solid #27272a; border-radius: 8px; padding: 24px; box-sizing: border-box;">
                 
-                <!-- Top Header -->
-                <div style="border-bottom: 1px solid #27272a; padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #a1a1aa;">
-                    УКТЦ • Дипломни проекти
-                  </span>
-                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: #71717a;">
-                    2026
-                  </span>
-                </div>
-
                 <!-- Status Header -->
                 <div style="margin-bottom: 16px;">
                   <h1 style="font-size: 16px; font-weight: 600; color: #ffffff; margin: 0 0 4px 0;">
@@ -195,11 +185,6 @@ export async function sendTicketConfirmationEmail(data: {
                       <td style="padding: 4px 0; color: #ffffff; font-weight: 700;">${data.budget} €</td>
                     </tr>
                   </table>
-                </div>
-
-                <!-- Short Notice -->
-                <div style="background-color: #101114; border: 1px solid #27272a; border-radius: 6px; padding: 10px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: #d4d4d8; line-height: 1.4;">
-                  Можете да проверявате статуса в портала с номера на тикета.
                 </div>
 
                 <!-- Footer -->
@@ -264,16 +249,6 @@ export async function sendTicketStatusEmail(data: {
             <td align="center">
               <div class="card" style="max-width: 480px; width: 100%; text-align: left; background-color: #121215; border: 1px solid #27272a; border-radius: 8px; padding: 24px; box-sizing: border-box;">
                 
-                <!-- Top Header -->
-                <div style="border-bottom: 1px solid #27272a; padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #a1a1aa;">
-                    УКТЦ • Дипломни проекти
-                  </span>
-                  <span style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 11px; color: #71717a;">
-                    2026
-                  </span>
-                </div>
-
                 <!-- Status Header -->
                 <div style="margin-bottom: 16px;">
                   <h1 style="font-size: 16px; font-weight: 600; color: #ffffff; margin: 0 0 4px 0;">

@@ -1006,10 +1006,6 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                 className="space-y-4"
               >
                 <div className="space-y-1">
-                  <div className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-400 uppercase tracking-wider font-medium">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                    Заявката е приета
-                  </div>
                   <h2 className="text-base sm:text-lg font-semibold text-white tracking-tight">
                     Номер на тикет
                   </h2>
@@ -1046,38 +1042,8 @@ export function TicketWizard({ onOpenStatusModal }: TicketWizardProps) {
                 <div className="rounded-md border border-zinc-700 bg-[#101114] p-3 text-xs font-mono text-zinc-300 space-y-1">
                   <div className="text-white font-medium">Имейл:</div>
                   <div>
-                    Изпратено е писмо на <span className="text-zinc-100 font-semibold">{submittedTicket.email}</span>.
+                    Изпратен е имейл на <span className="text-zinc-100 font-semibold">{submittedTicket.email}</span>.   
                   </div>
-                </div>
-
-                <div className="pt-2 flex gap-2">
-                  <button
-                    onClick={() => {
-                      setSubmittedTicket(null);
-                      setCurrentStep(1);
-                      setFullName("");
-                      setCourseCode("");
-                      setCommPlatform("");
-                      setCommHandle("");
-                      setSupervisor("");
-                      setIdeaTitle("");
-                      setIdeaDescription("");
-                      setIncludeCodeComments(false);
-                      setOfferedBudget(300);
-                      setAdditionalNotes("");
-                    }}
-                    className="flex-1 rounded-md border border-zinc-700 bg-[#18181c] py-2.5 text-xs sm:text-sm font-medium text-zinc-200 hover:bg-zinc-800 hover:text-white transition-colors"
-                  >
-                    Подай нова заявка
-                  </button>
-                  {onOpenStatusModal && (
-                    <button
-                      onClick={onOpenStatusModal}
-                      className="flex-1 rounded-md border border-zinc-200 bg-white py-2.5 text-xs sm:text-sm font-semibold text-zinc-950 hover:bg-zinc-200 transition-all shadow-[0_0_12px_rgba(255,255,255,0.12)]"
-                    >
-                      Провери статус
-                    </button>
-                  )}
                 </div>
               </motion.div>
             )}
